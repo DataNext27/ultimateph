@@ -1,0 +1,92 @@
+"ultimateph"
+{
+	"base"		"base"
+	"title"		"Prop Hunters - Ultimate Edition"
+	"maps"		"^ph_"
+	"menusystem"	"1"
+	"workshopid"	"3028430983"
+	"version" 	"v1.0.0"
+	"settings"
+	{
+		1
+		{
+			"name"		"ph_auto_team_balance"
+			"text"		"Auto balance teams"
+			"help"		"Automatically balance teams"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		2
+		{
+			"name"		"ph_nb_hunter"
+			"text"		"Number of hunters"
+			"help"		"Set the number of hunters, works only if auto balance is disable"
+			"type"		"Numeric"
+			"default"	"1"
+		}
+		3
+		{
+			"name"		"ph_roundlimit"
+			"text"		"Number of rounds"
+			"help"		"Set the number of rounds before mapvote"
+			"type"		"Numeric"
+			"default"	"10"
+		}
+		4
+		{
+			"name"		"ph_hunter_dmgpenalty"
+			"text"		"Damage taken by hunters"
+			"help"		"Amount of damage a hunter should take for shooting an incorrect prop"
+			"type"		"Numeric"
+			"default"	"3"
+		}
+		5
+		{
+			"name"		"ph_hunter_smggrenades"
+			"text"		"Number of SMG grenades"
+			"help"		"Amount of SMG grenades hunters should spawn with"
+			"type"		"Numeric"
+			"default"	"1"
+		}
+		6
+		{
+			"name"		"ph_dead_canroam"
+			"text"		"Use roam spectate mode"
+			"help"		"Can dead players use the roam spectate mode"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		7
+		{
+			"name"		"ph_props_onwinstayprops"
+			"text"		"Props stay props on win"
+			"help"		"If the props win, they stay on the props team"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		8
+		{
+			"name"		"ph_auto_taunt"
+			"text"		"Auto taunts enabled"
+			"help"		"Sets if auto taunts are enabled."
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		9
+		{
+			"name"		"ph_auto_taunt_delay_min"
+			"text"		"Min time without taunting"
+			"help"		"Mininum time to go without taunting (sec)."
+			"type"		"Numeric"
+			"default"	"60"
+		}
+		10
+		{
+			"name"		"ph_auto_taunt_delay_max"
+			"text"		"Max time without taunting"
+			"help"		"Maximum time to go without taunting (sec)."
+			"type"		"Numeric"
+			"default"	"120"
+		}
+	}
+}
