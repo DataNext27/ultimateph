@@ -1,5 +1,5 @@
 # Prop Hunters - Ultimate Edition
-This is a fork of [zikaeroh's Prop Hunters - Huskles Edition](https://github.com/zikaeroh/husklesph), intended to addd a few features
+This is a fork of [Zikaeroh's Prop Hunters - Huskles Edition](https://github.com/zikaeroh/husklesph), intended to addd a few features
 
 ## Improvements
 
