@@ -1,4 +1,11 @@
-# ultimateph
-Prop Hunters Ultimate Edition (PH Huskles Editions with some enhancements)
+# Prop Hunters - Ultimate Edition
+This is a fork of [zikaeroh's Prop Hunters - Huskles Edition](https://github.com/zikaeroh/husklesph), intended to addd a few features
 
-Also comes with a soundpack (not in the repo)
+## Improvements
+
+- Auto Team Balance is now optional (You can use it or set maximum Hunters)
+
+## Contributors
+
+-   MechanicalMind (original author)
+-   Zikaeroh (huskles edition author)
