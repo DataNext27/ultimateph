@@ -1,4 +1,4 @@
-local url = "https://raw.githubusercontent.com/zikaeroh/husklesph/master/gamemodes/husklesph/husklesph.txt"
+local url = "https://raw.githubusercontent.com/datanext27/ultimateph/master/gamemodes/ultimateph/ultimateph.txt"
 local downloadlinks = "https://steamcommunity.com/sharedfiles/filedetails/?id=3028430983"
 
 function GM:CheckForNewVersion(ply)
