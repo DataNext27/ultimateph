@@ -153,36 +153,116 @@ function GM:PlayerLoadout(ply)
 end
 
 local playerModels = {}
-local function addModel(model, sex)
+local function addModel(model, sex, pteam)
 	local t = {}
 	t.model = model
 	t.sex = sex
+
+	if type(pteam) == "string" then
+		pteam = pteam:lower()
+		if pteam == "prop" || pteam == "props" then
+			t.team = TEAM_PROP
+		elseif pteam == "hunter" || pteam == "hunters" then
+			t.team = TEAM_HUNTER
+		else
+			t.team = nil
+		end
+	else
+		t.team = nil
+	end
+
 	table.insert(playerModels, t)
 end
 
-addModel("male03", "male")
-addModel("male04", "male")
-addModel("male05", "male")
-addModel("male07", "male")
-addModel("male06", "male")
-addModel("male09", "male")
-addModel("male01", "male")
-addModel("male02", "male")
-addModel("male08", "male")
-addModel("female06", "female")
-addModel("female01", "female")
-addModel("female03", "female")
-addModel("female05", "female")
-addModel("female02", "female")
-addModel("female04", "female")
-addModel("refugee01", "male")
-addModel("refugee02", "male")
-addModel("refugee03", "male")
-addModel("refugee04", "male")
+local function removeModel(model)
+	for k, p, i in pairs(playerModels) do
+		if p.model == model then
+			table.remove(playerModels, k)
+		end
+	end
+end
+
+local defaultPlayerModels = {"male01", "male02", "male03", "male04", "male05", "male06", "male07", "male08", "male09", "female01", "female02", "female03", "female04", "female05", "female06", "refugee01", "refugee02", "refugee03", "refugee04"}
+local function removeBasicDefaultModels()
+	-- for k, p in pairs(playerModels) do
+	-- 	for r, m in pairs(defaultPlayerModels) do
+	-- 		if p.model == m then
+	-- 			table.remove(playerModels, k)
+	-- 		end
+	-- 	end
+	-- end
+
+	removeModel("male01")
+	removeModel("male02")
+	removeModel("male03")
+	removeModel("male04")
+	removeModel("male05")
+	removeModel("male06")
+	removeModel("male07")
+	removeModel("male08")
+	removeModel("male09")
+	removeModel("female01")
+	removeModel("female02")
+	removeModel("female03")
+	removeModel("female04")
+	removeModel("female05")
+	removeModel("female06")
+	removeModel("refugee01")
+	removeModel("refugee02")
+	removeModel("refugee03")
+	removeModel("refugee04")
+end
+
+local tempG = {}
+tempG.addModel = addModel
+tempG.removeBasicDefaultModels = removeBasicDefaultModels
+tempG.removeModel = removeModel
+
+-- inherit from _G
+local meta = {}
+meta.__index = _G
+meta.__newindex = _G
+setmetatable(tempG, meta)
+
+local function loadModels(rootFolder)
+	local files = file.Find(rootFolder .. "*.lua", "LUA")
+	for k, v in pairs(files) do
+		local filePath = rootFolder .. v
+		AddCSLuaFile(filePath)
+
+		local f = CompileFile(filePath)
+		if !f then
+			return
+		end
+
+		setfenv(f, tempG)
+		local b, err = pcall(f)
+
+		local s = SERVER && "Server" || "Client"
+		local c = SERVER && 90 || 0
+		if !b then
+			MsgC(Color(255, 50, 50 + c), s .. " loading models failed: " .. filePath .. "\nError: " .. err .. "\n")
+		else
+			MsgC(Color(50, 255, 50 + c), s .. " loaded models file: " .. filePath .. "\n")
+		end
+	end
+end
+
+function GM:LoadModels()
+	loadModels((GM || GAMEMODE).Folder:sub(11) .. "/gamemode/models/")
+	loadModels("ultimateph/models/")
+end
+
+GM:LoadModels()
 
 function GM:PlayerSetModel(ply)
 	local cl_playermodel = ply:GetInfo("cl_playermodel")
 	local playerModel = table.Random(playerModels)
+
+	while !(playerModel.team == ply:Team() || playerModel.team == nil) do
+		playerModel = table.Random(playerModels)
+	end
+
 	cl_playermodel = playerModel.model
 
 	local modelname = player_manager.TranslatePlayerModel(cl_playermodel)

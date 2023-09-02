@@ -92,7 +92,8 @@ end)
 
 commandToUlx("ph_nb_hunter", function(c)
     c:addParam{ type = ULib.cmds.NumArg, default = 1, min = 1, max = 10, hint = "hunters", ULib.cmds.round, ULib.cmds.optional }
-    c:help("Set the number of Hunters (Auto Team Balance should be disable)"))
+    c:help("Set the number of Hunters (Auto Team Balance should be disable)")
+end)
 
 commandToUlx("ph_auto_taunt", function(c)
     c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }

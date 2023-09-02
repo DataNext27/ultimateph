@@ -1,0 +1,31 @@
+Create a file in (if the folders don't exist, create them)
+
+    garrysmod/lua/ultimateph/models/
+
+called
+
+    something.lua
+
+replacing something with a different name (e.g. the name of your addon, your name, etc)
+
+in something.lua list your models in the form
+
+    addModel("name", "sex", "team")
+
+name is the name of the model (generally the name in the model's lua file)
+sex is gender for taunts (male or female)
+team is the team the model will be used in (hunters, props or both)
+
+examples
+
+    addModel("Boxman", "male", "props")
+    addModel("Tron Anon", "male", "hunters")
+
+
+To remove all default player models, in something.lua you can put on the first line
+
+    removeBasicDefaultModels()
+
+Or you can remove them one by one using
+
+    removeModel("name")
