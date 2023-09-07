@@ -159,7 +159,7 @@ function GM:SetupRound()
 end
 
 function GM:StartRound()
-	self.LastPropDeath = nil
+	self.LastPropDeath = nil 
 	self.FirstHunterKill = nil
 
 	local hunters, props = 0, 0
@@ -184,7 +184,11 @@ function GM:StartRound()
 	end
 
 	self.RoundSettings = {}
-	self.RoundSettings.RoundTime = math.Round((c * 0.5 / hunters + 60 * 4)  * math.sqrt(props / hunters))
+	if self.RoundTime:GetInt() > 0 then
+		self.RoundSettings.RoundTime = self.RoundTime:GetInt()
+	else
+		self.RoundSettings.RoundTime = math.Round((c * 0.5 / hunters + 60 * 4)  * math.sqrt(props / hunters))
+	end
 	self.RoundSettings.PropsCamDistance = self.PropsCamDistance:GetFloat()
 	print("Round time is " .. (self.RoundSettings.RoundTime / 60) .. " (" .. c .. " props)")
 	self:NetworkGameSettings()
@@ -225,7 +229,7 @@ function GM:EndRound(winningTeam)
 	net.WriteTable(awards)
 	net.Broadcast()
 
-	self.RoundSettings.NextRoundTime = 15
+	self.RoundSettings.NextRoundTime = self.PostRoundTime:GetInt()
 	self:NetworkGameSettings()
 	self:SetGameState(ROUND_POST)
 end

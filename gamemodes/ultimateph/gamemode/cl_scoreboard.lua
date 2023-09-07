@@ -226,7 +226,7 @@ local function createScoreboardPanel()
 		local t = GAMEMODE.Name || ""
 		local tw = surface.GetTextSize(t)
 		draw.ShadowText(t, "RobotoHUD-25", 4, 0, Color(199, 49, 29), 0)
-		draw.ShadowText(tostring(GAMEMODE.Version || "error") .. ", maintained by Zikaeroh, code by many cool people :)", "RobotoHUD-L12", 4 + tw + 24, h  * 0.9, Color(220, 220, 220), 0, 4)
+		draw.ShadowText(tostring(GAMEMODE.Version || "error") .. ", maintained by DataNext, code by many cool people :)", "RobotoHUD-L12", 4 + tw + 24, h  * 0.9, Color(220, 220, 220), 0, 4)
 	end
 
 	function menu.Credits:PerformLayout()

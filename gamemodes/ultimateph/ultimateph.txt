@@ -5,7 +5,7 @@
 	"maps"		"^ph_"
 	"menusystem"	"1"
 	"workshopid"	"3028430983"
-	"version" 	"v1.0.0"
+	"version" 	"v1.2.2"
 	"settings"
 	{
 		1
@@ -22,7 +22,7 @@
 			"text"		"Number of hunters"
 			"help"		"Set the number of hunters, works only if auto balance is disable"
 			"type"		"Numeric"
-			"default"	"1"
+			"default"	"2"
 		}
 		3
 		{
@@ -34,13 +34,30 @@
 		}
 		4
 		{
+			"name"		"ph_roundtime"
+			"text"		"Rounds time limit"
+			"help"		"Time limit before ending the round (0 for automatic time)"
+			"type"		"Numeric"
+			"default"	"0"
+		}
+		5
+		{
+			"name"		"ph_postroundtime"
+			"text"		"Post-round time"
+			"help"		"Time before next round after end of the round"
+			"type"		"Numeric"
+			"default"	"15"
+
+		}
+		6
+		{
 			"name"		"ph_hunter_dmgpenalty"
 			"text"		"Damage taken by hunters"
 			"help"		"Amount of damage a hunter should take for shooting an incorrect prop"
 			"type"		"Numeric"
 			"default"	"3"
 		}
-		5
+		7
 		{
 			"name"		"ph_hunter_smggrenades"
 			"text"		"Number of SMG grenades"
@@ -48,7 +65,7 @@
 			"type"		"Numeric"
 			"default"	"1"
 		}
-		6
+		8
 		{
 			"name"		"ph_dead_canroam"
 			"text"		"Use roam spectate mode"
@@ -56,7 +73,7 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		7
+		9
 		{
 			"name"		"ph_props_onwinstayprops"
 			"text"		"Props stay props on win"
@@ -64,7 +81,7 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		8
+		10
 		{
 			"name"		"ph_auto_taunt"
 			"text"		"Auto taunts enabled"
@@ -72,7 +89,7 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		9
+		11
 		{
 			"name"		"ph_auto_taunt_delay_min"
 			"text"		"Min time without taunting"
@@ -80,7 +97,7 @@
 			"type"		"Numeric"
 			"default"	"60"
 		}
-		10
+		12
 		{
 			"name"		"ph_auto_taunt_delay_max"
 			"text"		"Max time without taunting"

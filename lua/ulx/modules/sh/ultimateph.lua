@@ -91,13 +91,23 @@ commandToUlx("ph_auto_team_balance", function(c)
 end)
 
 commandToUlx("ph_nb_hunter", function(c)
-    c:addParam{ type = ULib.cmds.NumArg, default = 1, min = 1, max = 10, hint = "hunters", ULib.cmds.round, ULib.cmds.optional }
-    c:help("Set the number of Hunters (Auto Team Balance should be disable)")
+    c:addParam{ type = ULib.cmds.NumArg, default = 2, min = 1, max = 10, hint = "hunters", ULib.cmds.round, ULib.cmds.optional }
+    c:help("Set the number of Hunters (Auto Team Balance should be disable).")
 end)
 
 commandToUlx("ph_auto_taunt", function(c)
     c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
     c:help("Enable/disable auto taunt.")
+end)
+
+commandToUlx("ph_roundtime", function(c)
+    c:addParam{ type = ULib.cmds.NumArg, default = 0, min = 0, max = 3600, hint = "rounds", ULib.cmds.optional }
+    c:help("Define the time limit before ending round.")
+end)
+
+commandToUlx("ph_postroundtime", function (c)
+    c:addParam{ type = ULib.cmds.NumArg, default = 15, min = 2, max = 30, hint = "rounds", ULib.cmds.optional }
+    c:help("Define time before next round after winning/loosing")
 end)
 
 function ulx.ultimatephAutoTauntDelay(calling_ply, minimum, maximum)

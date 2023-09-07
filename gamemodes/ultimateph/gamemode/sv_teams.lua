@@ -15,7 +15,7 @@ concommand.Add("ph_jointeam", function(ply, com, args)
 end)
 
 function GM:BalanceTeams()
-	if !self.AutoTeamBalance:GetBool() && !(self.NumberHunter:GetInt() > player.GetAll() + 1) then
+	if !self.AutoTeamBalance:GetBool() && !(self.NumberHunter:GetInt() > (player.GetCount() + 1)) then
 		local tabProps = team.GetPlayers(TEAM_PROP)
 
 		local nbHunters = self.NumberHunter:GetInt()
@@ -31,13 +31,7 @@ function GM:BalanceTeams()
 				ply:SetTeam(TEAM_PROP)
 			end
 		end
-
-		if self.NumberHunter:GetInt() > player.GetAll() + 1 then
-			
-		end
-
-		GlobalChatMsg("Team Hunters : ", team.NumPlayers(TEAM_HUNTER), " players\nTeam Props : ", team.NumPlayers(TEAM_PROP), " players", Color(50, 220, 150))
-	elseif (self.NumberHunter:GetInt() > player.GetAll() + 1) then
+	elseif (self.NumberHunter:GetInt() > (player.GetCount() + 1)) then
 		GlobalChatMsg("There is not enough players to have ", self.NumberHunter:GetInt(), " hunters. Now using Auto Team Balance until their is enough players")
 
 		local teamDiff = team.NumPlayers(TEAM_HUNTER) - team.NumPlayers(TEAM_PROP)
