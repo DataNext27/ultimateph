@@ -159,7 +159,7 @@ function GM:SetupRound()
 end
 
 function GM:StartRound()
-	self.LastPropDeath = nil 
+	self.LastPropDeath = nil
 	self.FirstHunterKill = nil
 
 	local hunters, props = 0, 0

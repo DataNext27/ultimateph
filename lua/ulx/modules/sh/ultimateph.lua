@@ -87,7 +87,7 @@ end)
 
 commandToUlx("ph_auto_team_balance", function(c)
     c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
-    c:help("Set whether or not teams shoulf automatically balance.")
+    c:help("Set whether or not teams should automatically balance.")
 end)
 
 commandToUlx("ph_nb_hunter", function(c)
@@ -108,6 +108,16 @@ end)
 commandToUlx("ph_postroundtime", function (c)
     c:addParam{ type = ULib.cmds.NumArg, default = 15, min = 2, max = 30, hint = "rounds", ULib.cmds.optional }
     c:help("Define time before next round after winning/loosing")
+end)
+
+commandToUlx("ph_hunter_deaf_onhiding", function(c)
+    c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
+    c:help("Set whether or not hunters are deaf while hiding duration (black screen)")
+end)
+
+commandToUlx("ph_props_silent_footsteps", function(c)
+    c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
+    c:help("Does props emit footsteps sounds while moving")
 end)
 
 function ulx.ultimatephAutoTauntDelay(calling_ply, minimum, maximum)

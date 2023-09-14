@@ -63,13 +63,21 @@ function GM:PlayerSetHull(ply, hullx, hully, hullz, duckz)
 end
 
 function GM:EntityEmitSound( t )
-	if self:GetGameState() == ROUND_HIDE then
+	if GetConVar("ph_hunter_deaf_onhiding"):GetBool() && self:GetGameState() == ROUND_HIDE then
 		for _, ply in pairs(player.GetAll()) do
 			if ply:IsHunter() then
 				return false
 			else
 				return nil
 			end
+		end
+	end
+end
+
+function GM:PlayerFootstep( ply, pos, foot, sound, volume, filter )
+	if GetConVar("ph_props_silent_footsteps"):GetBool() then
+		if ply:IsProp() then
+			return true
 		end
 	end
 end

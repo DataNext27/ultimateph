@@ -5,7 +5,7 @@
 	"maps"		"^ph_"
 	"menusystem"	"1"
 	"workshopid"	"3028430983"
-	"version" 	"v1.2.2"
+	"version" 	"v1.2.4"
 	"settings"
 	{
 		1
@@ -104,6 +104,22 @@
 			"help"		"Maximum time to go without taunting (sec)."
 			"type"		"Numeric"
 			"default"	"120"
+		}
+		13
+		{
+			"name"		"ph_hunter_deaf_onhiding"
+			"text"		"Deaf hunter on hinding"
+			"help"		"Deaf hunters while hiding duration (black screen)"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		14
+		{
+			"name"		"ph_props_silent_footsteps"
+			"text"		"Props silent footsteps"
+			"help"		"Does props emit footsteps sounds while moving"
+			"type"		"CheckBox"
+			"default"	"0"
 		}
 	}
 }
