@@ -49,4 +49,4 @@ examples
 
 	addTaunt("Radio", {
 		"music/radio1.mp3"
-	}, "props", nil, {"music"}, 39)
+	}, "props", "nil", {"music"}, 39)
