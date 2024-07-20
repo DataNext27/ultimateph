@@ -13,7 +13,7 @@ This is a fork of [Zikaeroh's Prop Hunters - Huskles Edition](https://github.com
 - You have access to more time configurations
 
 ## Configurations
-
+To help configure the addon on server, there is the [wiki](https://github.com/DataNext27/ultimateph/wiki)</br>
 There is a bunch of new commands, [see here](https://github.com/DataNext27/ultimateph/wiki/Commands) </br>
 To add taunts, [see here](https://github.com/DataNext27/ultimateph/wiki/Taunts) </br>
 To add models, [see here](https://github.com/DataNext27/ultimateph/wiki/Models)
