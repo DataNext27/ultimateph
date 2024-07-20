@@ -182,7 +182,7 @@ local function removeModel(model)
 	end
 end
 
-local defaultPlayerModels = {"male01", "male02", "male03", "male04", "male05", "male06", "male07", "male08", "male09", "female01", "female02", "female03", "female04", "female05", "female06", "refugee01", "refugee02", "refugee03", "refugee04"}
+-- local defaultPlayerModels = {"male01", "male02", "male03", "male04", "male05", "male06", "male07", "male08", "male09", "female01", "female02", "female03", "female04", "female05", "female06", "refugee01", "refugee02", "refugee03", "refugee04"}
 local function removeBasicDefaultModels()
 	-- for k, p in pairs(playerModels) do
 	-- 	for r, m in pairs(defaultPlayerModels) do

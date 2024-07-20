@@ -35,14 +35,34 @@ commandToUlx("ph_voice_heardead", function(c)
     c:help("Enable/disable the ability to hear the voice chat of the dead.")
 end)
 
+commandToUlx("ph_dead_canroam", function(c)
+    c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
+    c:help("Enable/disable roaming spectator view for dead players.")
+end)
+
 commandToUlx("ph_roundlimit", function(c)
     c:addParam{ type = ULib.cmds.NumArg, default = 10, min = 5, max = 100, hint = "rounds", ULib.cmds.round, ULib.cmds.optional }
     c:help("Set the round limit for the current map.")
 end)
 
+commandToUlx("ph_roundtime", function(c)
+    c:addParam{ type = ULib.cmds.NumArg, default = 0, min = 0, max = 3600, hint = "rounds", ULib.cmds.optional }
+    c:help("Define the time limit before ending round.")
+end)
+
 commandToUlx("ph_mapstartwait", function(c)
     c:addParam{ type = ULib.cmds.NumArg, default = 30, min = 0, max = 600, hint = "seconds", ULib.cmds.round, ULib.cmds.optional }
     c:help("Set the number of seconds to wait before starting a map.")
+end)
+
+commandToUlx("ph_postroundtime", function (c)
+    c:addParam{ type = ULib.cmds.NumArg, default = 15, min = 2, max = 30, hint = "rounds", ULib.cmds.optional }
+    c:help("Define time before next round after winning/loosing")
+end)
+
+commandToUlx("ph_map_time_limit", function(c)
+    c:addParam{ type = ULib.cmds.NumArg, default = -1, min = -1, max = 120, hint = "minutes", ULib.cmds.optional }
+    c:help("Minutes before declaring the next round to be the last round (-1 to disable)")
 end)
 
 commandToUlx("ph_hunter_dmgpenalty", function(c)
@@ -55,9 +75,9 @@ commandToUlx("ph_hunter_smggrenades", function(c)
     c:help("Set the number of SMG grenates hunters should spawn with.")
 end)
 
-commandToUlx("ph_dead_canroam", function(c)
+commandToUlx("ph_hunter_deaf_onhiding", function(c)
     c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
-    c:help("Enable/disable roaming spectator view for dead players.")
+    c:help("Set whether or not hunters are deaf while hiding duration (black screen)")
 end)
 
 commandToUlx("ph_props_onwinstayprops", function(c)
@@ -80,9 +100,9 @@ commandToUlx("ph_props_camdistance", function(c)
     c:help("Set the camera distance multiplier for disguised props.")
 end)
 
-commandToUlx("ph_taunt_menu_phrase", function(c)
-    c:addParam{ type = ULib.cmds.StringArg, hint = "phrase", default = "", ULib.cmds.optional }
-    c:help("Set the taunt menu phrase.")
+commandToUlx("ph_props_silent_footsteps", function(c)
+    c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
+    c:help("Does props emit footsteps sounds while moving")
 end)
 
 commandToUlx("ph_auto_team_balance", function(c)
@@ -95,29 +115,14 @@ commandToUlx("ph_nb_hunter", function(c)
     c:help("Set the number of Hunters (Auto Team Balance should be disable).")
 end)
 
+commandToUlx("ph_taunt_menu_phrase", function(c)
+    c:addParam{ type = ULib.cmds.StringArg, hint = "phrase", default = "", ULib.cmds.optional }
+    c:help("Set the taunt menu phrase.")
+end)
+
 commandToUlx("ph_auto_taunt", function(c)
     c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
     c:help("Enable/disable auto taunt.")
-end)
-
-commandToUlx("ph_roundtime", function(c)
-    c:addParam{ type = ULib.cmds.NumArg, default = 0, min = 0, max = 3600, hint = "rounds", ULib.cmds.optional }
-    c:help("Define the time limit before ending round.")
-end)
-
-commandToUlx("ph_postroundtime", function (c)
-    c:addParam{ type = ULib.cmds.NumArg, default = 15, min = 2, max = 30, hint = "rounds", ULib.cmds.optional }
-    c:help("Define time before next round after winning/loosing")
-end)
-
-commandToUlx("ph_hunter_deaf_onhiding", function(c)
-    c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
-    c:help("Set whether or not hunters are deaf while hiding duration (black screen)")
-end)
-
-commandToUlx("ph_props_silent_footsteps", function(c)
-    c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
-    c:help("Does props emit footsteps sounds while moving")
 end)
 
 function ulx.ultimatephAutoTauntDelay(calling_ply, minimum, maximum)
@@ -137,11 +142,11 @@ autoTauntDelay:addParam{ type = ULib.cmds.NumArg, default = 60, min = 5, max = 6
 autoTauntDelay:addParam{ type = ULib.cmds.NumArg, default = 120, min = 5, max = 600, hint = "minimum", ULib.cmds.round, ULib.cmds.optional }
 autoTauntDelay:help("Set the auto taunt delay range.")
 
-commandToUlx("ph_endround", function(c)
-    c:help("Ends the round on a tie.")
+commandToUlx("ph_auto_taunt_props_only", function(c)
+    c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
+    c:help("Enable/disable auto taunt for props only.")
 end)
 
-commandToUlx("ph_map_time_limit", function(c)
-    c:addParam{ type = ULib.cmds.NumArg, default = -1, min = -1, max = 120, hint = "minutes", ULib.cmds.optional }
-    c:help("Minutes before declaring the next round to be the last round (-1 to disable)")
+commandToUlx("ph_endround", function(c)
+    c:help("Ends the round on a tie.")
 end)
