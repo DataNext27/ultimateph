@@ -1,1 +1,6 @@
-{"title":"Prop Hunters - Ultimate Edition","type":"gamemode","tags":["fun"],"ignore":[".*", ".vscode", "README.md"]}
+{
+    "title":"Prop Hunters - Ultimate Edition",
+    "type":"gamemode",
+    "tags":["fun"],
+    "ignore":[".*", ".vscode", "README.md", ".gitignore", "gamemodes/ultimateph/gamemode/models/how-to-add-new-models.txt", "gamemodes/ultimateph/gamemode/taunts/how-to-add-new-taunts.txt"]
+}
