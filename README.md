@@ -12,7 +12,7 @@ This is a fork of [Zikaeroh's Prop Hunters - Huskles Edition](https://github.com
 - You can prevent props from emitting footsteps sounds
 - You have access to more time configurations
 
-## Configurations.
+## Configurations
 
 There is a bunch of new commands, [see here](https://github.com/DataNext27/ultimateph/wiki/Commands) </br>
 To add taunts, [see here](https://github.com/DataNext27/ultimateph/wiki/Taunts) </br>
