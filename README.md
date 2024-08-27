@@ -14,6 +14,7 @@ This is a fork of [Zikaeroh's Prop Hunters - Huskles Edition](https://github.com
 - You can add your own custom player models or somes from workshop
 - You can deaf hunters during the hiding duration
 - You can prevent props from emitting footsteps sounds
+- You can see where hunters are aiming at
 - You have access to more time configurations
 
 ## Configurations
