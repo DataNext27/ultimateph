@@ -178,6 +178,7 @@ local function removeModel(model)
 	for k, p, i in pairs(playerModels) do
 		if p.model == model then
 			table.remove(playerModels, k)
+			break
 		end
 	end
 end

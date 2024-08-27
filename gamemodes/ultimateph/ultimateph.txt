@@ -5,7 +5,7 @@
 	"maps"		"^ph_"
 	"menusystem"	"1"
 	"workshopid"	"3028430983"
-	"version" 	"v1.2.4"
+	"version" 	"v1.3.0"
 	"settings"
 	{
 		1
@@ -42,6 +42,14 @@
 		}
 		5
 		{
+			"name"		"ph_hidingtime"
+			"text"		"Hiding phase time"
+			"help"		"Time before hunters are released"
+			"type"		"Numeric"
+			"default"	"30"
+		}
+		6
+		{
 			"name"		"ph_postroundtime"
 			"text"		"Post-round time"
 			"help"		"Time before next round after end of the round"
@@ -49,7 +57,7 @@
 			"default"	"15"
 
 		}
-		6
+		7
 		{
 			"name"		"ph_hunter_dmgpenalty"
 			"text"		"Damage taken by hunters"
@@ -57,7 +65,7 @@
 			"type"		"Numeric"
 			"default"	"3"
 		}
-		7
+		8
 		{
 			"name"		"ph_hunter_smggrenades"
 			"text"		"Number of SMG grenades"
@@ -65,7 +73,7 @@
 			"type"		"Numeric"
 			"default"	"1"
 		}
-		8
+		9
 		{
 			"name"		"ph_dead_canroam"
 			"text"		"Use roam spectate mode"
@@ -73,7 +81,7 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		9
+		10
 		{
 			"name"		"ph_props_onwinstayprops"
 			"text"		"Props stay props on win"
@@ -81,7 +89,7 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		10
+		11
 		{
 			"name"		"ph_auto_taunt"
 			"text"		"Auto taunts enabled"
@@ -89,7 +97,7 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		11
+		12
 		{
 			"name"		"ph_auto_taunt_delay_min"
 			"text"		"Min time without taunting"
@@ -97,7 +105,7 @@
 			"type"		"Numeric"
 			"default"	"60"
 		}
-		12
+		13
 		{
 			"name"		"ph_auto_taunt_delay_max"
 			"text"		"Max time without taunting"
@@ -105,7 +113,7 @@
 			"type"		"Numeric"
 			"default"	"120"
 		}
-		13
+		14
 		{
 			"name"		"ph_hunter_deaf_onhiding"
 			"text"		"Deaf hunter on hinding"
@@ -113,7 +121,7 @@
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-		14
+		15
 		{
 			"name"		"ph_props_silent_footsteps"
 			"text"		"Props silent footsteps"

@@ -55,6 +55,11 @@ commandToUlx("ph_mapstartwait", function(c)
     c:help("Set the number of seconds to wait before starting a map.")
 end)
 
+commandToUlx("ph_hidingtime", function (c)
+    c:addParam{ type = ULib.cmds.NumArg, default = 30, min = 1, max = 1800, hint = "seconds", ULib.cmds.optional }
+    c:help("Define time before next round after winning/loosing")
+end)
+
 commandToUlx("ph_postroundtime", function (c)
     c:addParam{ type = ULib.cmds.NumArg, default = 15, min = 2, max = 30, hint = "rounds", ULib.cmds.optional }
     c:help("Define time before next round after winning/loosing")
@@ -113,6 +118,11 @@ end)
 commandToUlx("ph_nb_hunter", function(c)
     c:addParam{ type = ULib.cmds.NumArg, default = 2, min = 1, max = 10, hint = "hunters", ULib.cmds.round, ULib.cmds.optional }
     c:help("Set the number of Hunters (Auto Team Balance should be disable).")
+end)
+
+commandToUlx("ph_hunter_aim_laser", function(c)
+    c:addParam{ type = ULib.cmds.NumArg, default = 0, min = 0, max = 2, hint = "choose", ULib.cmds.round, ULib.cmds.optional }
+    c:help("Set who can see the hunters aims. 0 = nobody, 1 = spectators only, 2 = props & spectators")
 end)
 
 commandToUlx("ph_taunt_menu_phrase", function(c)

@@ -74,8 +74,12 @@ function GM:Initialize()
 	self:StartAutoTauntTimer()
 end
 
+hook.Add("Think", "StartupVersionCheck", function()
+	hook.Remove("Think", "StartupVersionCheck")
+	GAMEMODE:CheckForNewVersion()
+end)
+
 function GM:InitPostEntity()
-	self:CheckForNewVersion()
 	self:InitPostEntityAndMapCleanup()
 
 	RunConsoleCommand("mp_show_voice_icons", "0")

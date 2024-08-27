@@ -15,6 +15,7 @@ include("cl_taunt.lua")
 include("cl_endroundboard.lua")
 include("cl_mapvote.lua")
 include("cl_bannedmodels.lua")
+include("cl_aimlaser.lua")
 
 function GM:InitPostEntity()
 	net.Start("clientIPE")

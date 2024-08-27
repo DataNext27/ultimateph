@@ -282,7 +282,7 @@ function GM:RoundsThink()
 			self:SetupRound()
 		end
 	elseif self:GetGameState() == ROUND_HIDE then
-		if self:GetStateRunningTime() > 30 then
+		if self:GetStateRunningTime() > self.HidingTime:GetInt() then
 			self:StartRound()
 		end
 	elseif self:GetGameState() == ROUND_SEEK then
