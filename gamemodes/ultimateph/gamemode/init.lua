@@ -51,6 +51,7 @@ GM.PropsSmallSize = CreateConVar("ph_props_small_size", 200, bit.bor(FCVAR_NOTIF
 GM.PropsJumpPower = CreateConVar("ph_props_jumppower", 1.2, bit.bor(FCVAR_NOTIFY), "Jump power bonus for when props are disguised")
 GM.PropsCamDistance = CreateConVar("ph_props_camdistance", 1, bit.bor(FCVAR_NOTIFY), "The camera distance multiplier for props when disguised")
 GM.PropsSilentFootsteps = CreateConVar("ph_props_silent_footsteps", 0, bit.bor(FCVAR_NOTIFY), "Does props emit footsteps sounds while moving")
+GM.PropTpose = CreateConVar("ph_props_tpose", 0, bit.bor(FCVAR_NOTIFY), "Should props be fully animated or Tpose")
 
 GM.AutoTeamBalance = CreateConVar("ph_auto_team_balance", 1, bit.bor(FCVAR_NOTIFY), "Automatically balance teams")
 GM.NumberHunter = CreateConVar("ph_nb_hunter", 2, bit.bor(FCVAR_NOTIFY), "Set the maximum number of hunters, only works if auto team balance is disable")
