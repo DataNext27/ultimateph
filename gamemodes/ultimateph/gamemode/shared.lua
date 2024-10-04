@@ -86,7 +86,9 @@ function GM:PlayerFootstep( ply, pos, foot, sound, volume, filter )
 end
 
 hook.Add('CalcMainActivity', 'PropTpose', function(ply)
-	if ply:Team() == TEAM_PROP && GAMEMODE.PropTpose:GetInt() == 1 && ply:IsDisguised() == false then
-		return ACT_INVALID
+	if GetConVar("ph_props_tpose"):GetBool() then
+		if ply:IsProp() then
+			return ACT_INVALID
+		end
 	end
 end)
