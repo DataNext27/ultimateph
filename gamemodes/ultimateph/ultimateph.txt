@@ -129,5 +129,13 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
+		16
+		{
+			"name"		"ph_props_tpose"
+			"text"		"Props Tpose"
+			"help"		"Should props tpose"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
 	}
 }
