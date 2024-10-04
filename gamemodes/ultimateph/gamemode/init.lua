@@ -52,6 +52,7 @@ GM.PropsJumpPower = CreateConVar("ph_props_jumppower", 1.2, bit.bor(FCVAR_NOTIFY
 GM.PropsCamDistance = CreateConVar("ph_props_camdistance", 1, bit.bor(FCVAR_NOTIFY), "The camera distance multiplier for props when disguised")
 GM.PropsSilentFootsteps = CreateConVar("ph_props_silent_footsteps", 0, bit.bor(FCVAR_NOTIFY), "Does props emit footsteps sounds while moving")
 GM.PropTpose = CreateConVar("ph_props_tpose", 0, bit.bor(FCVAR_NOTIFY), "Should props be fully animated or Tpose")
+GM.PropUndisguisedThirdperson = CreateConVar("ph_props_undisguised_thirdperson", 0, bit.bor(FCVAR_NOTIFY), "Should props start in thirdperson")
 
 GM.AutoTeamBalance = CreateConVar("ph_auto_team_balance", 1, bit.bor(FCVAR_NOTIFY), "Automatically balance teams")
 GM.NumberHunter = CreateConVar("ph_nb_hunter", 2, bit.bor(FCVAR_NOTIFY), "Set the maximum number of hunters, only works if auto team balance is disable")
