@@ -115,6 +115,11 @@ commandToUlx("ph_props_tpose", function(c)
     c:help("Should a prop be fully animated or tpose")
 end)
 
+commandToUlx("ph_props_undisguised_thirdperson", function(c)
+    c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
+    c:help("Should props start in thirdperson")
+end)
+
 commandToUlx("ph_auto_team_balance", function(c)
     c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
     c:help("Set whether or not teams should automatically balance.")
