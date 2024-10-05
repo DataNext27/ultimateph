@@ -28,10 +28,6 @@ function PlayerMeta:IsHunter() return self:Team() == TEAM_HUNTER end
 function PlayerMeta:IsProp() return self:Team() == TEAM_PROP end
 
 GM.GameState = GAMEMODE && GAMEMODE.GameState || ROUND_WAIT
-GM.StartWaitTime = CreateConVar("ph_mapstartwait", 30, bit.bor(FCVAR_NOTIFY, FCVAR_REPLICATED), "Number of seconds to wait for players on map start before starting round")
-GM.HidingTime = CreateConVar("ph_hidingtime", 30, bit.bor(FCVAR_NOTIFY, FCVAR_REPLICATED), "Time before hunters are released")
-
-GM.HunterAimRay = CreateConVar("ph_hunter_aim_laser", 0, bit.bor(FCVAR_NOTIFY, FCVAR_REPLICATED), "0 for none, 1 for spectators, 2 for props and spectators")
 
 team.SetUp(TEAM_SPEC, "Spectators", Color(120, 120, 120), false) -- Setting Joinable to false allows us to use team.BestAutoJoinTeam and have it only include the Hunters/Props teams.
 team.SetUp(TEAM_HUNTER, "Hunters", Color(255, 150, 50))
