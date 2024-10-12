@@ -129,5 +129,21 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
+		16
+		{
+			"name"		"ph_props_tpose"
+			"text"		"Props Tpose"
+			"help"		"Should props tpose"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		17
+		{
+			"name"		"ph_props_undisguised_thirdperson"
+			"text"		"Props Undisguised Thirdperson"
+			"help"		"Should props start in thirdperson"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
 	}
 }

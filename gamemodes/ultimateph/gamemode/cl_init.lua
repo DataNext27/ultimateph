@@ -16,6 +16,7 @@ include("cl_endroundboard.lua")
 include("cl_mapvote.lua")
 include("cl_bannedmodels.lua")
 include("cl_aimlaser.lua")
+include("sh_init.lua")
 
 function GM:InitPostEntity()
 	net.Start("clientIPE")
@@ -100,9 +101,30 @@ function GM:CalcView(ply, pos, angles, fov)
 			return view
 		end
 	end
+-- Thirdperson for undisguised props
+	if ply:IsPlayer() && GetConVar("ph_props_undisguised_thirdperson"):GetBool() && ply:Team() == TEAM_PROP && ply:IsDisguised() == false then
+		local trace = util.TraceHull{ -- the following has been modified from ulx-commands by Timmy
+			start = pos,
+			endpos = pos - angles:Forward() * 100,
+			mins = Vector( -4, -4, -4 ),
+			maxs = Vector( 4, 4, 4 ),
+		}
+
+		if trace.Hit then
+			pos = trace.HitPos
+		else
+			pos = pos - angles:Forward() * 100
+		end
+
+		return { origin=pos, angles=angles, drawviewer=true }
+	end
 end
 
-function GM:ShouldDrawLocalPlayer()
+function GM:ShouldDrawLocalPlayer(ply)
+	if ply:IsPlayer() && GetConVar("ph_props_undisguised_thirdperson"):GetBool() && ply:Team() == TEAM_PROP then
+		return true
+	end
+	
 	return false
 end
 
