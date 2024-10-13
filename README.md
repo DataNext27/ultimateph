@@ -1,5 +1,5 @@
 # Prop Hunters - Ultimate Edition
-![Current Version](https://img.shields.io/badge/version-1.3.0-blue?style=for-the-badge)
+![Current Version](https://img.shields.io/badge/version-1.3.1-blue?style=for-the-badge)
 ![Steam subscriptions](https://img.shields.io/steam/subscriptions/3028430983?style=for-the-badge)
 ![Steam Favorites](https://img.shields.io/steam/favorites/3028430983?style=for-the-badge&color=yellow)
 <a href='https://ko-fi.com/M4M2VL6WW' target='_blank'><img height='29' style='border:0px;height:29px;' src='https://storage.ko-fi.com/cdn/brandasset/kofi_button_dark.png' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>  
