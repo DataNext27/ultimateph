@@ -133,7 +133,7 @@
 		{
 			"name"		"ph_props_tpose"
 			"text"		"Props Tpose"
-			"help"		"Should props tpose"
+			"help"		"Should props be in T pose"
 			"type"		"CheckBox"
 			"default"	"0"
 		}
@@ -141,7 +141,7 @@
 		{
 			"name"		"ph_props_undisguised_thirdperson"
 			"text"		"Props Undisguised Thirdperson"
-			"help"		"Should props start in thirdperson"
+			"help"		"Should props be in thirdperson when undisguised"
 			"type"		"CheckBox"
 			"default"	"0"
 		}
