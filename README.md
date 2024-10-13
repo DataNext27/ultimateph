@@ -16,6 +16,8 @@ This is a fork of [Zikaeroh's Prop Hunters - Huskles Edition](https://github.com
 - You can prevent props from emitting footsteps sounds
 - You can see where hunters are aiming at
 - You have access to more time configurations
+- You can make props use T pose
+- You can make props be in thirdperson when undisguised
 
 ## Configurations
 To help configure the addon on server, there is the [wiki](https://github.com/DataNext27/ultimateph/wiki)</br>
