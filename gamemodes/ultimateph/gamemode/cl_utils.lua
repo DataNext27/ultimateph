@@ -1,3 +1,148 @@
+-- former cl_aimlaser.lua
+local beamMat = Material("ultimateph/aim_laser")
+local ray_color = Color(50,170,46)
+local ray_width = 6
+
+local dotMat = Material("ultimateph/aim_dot")
+local dot_color = Color(255,255,255)
+
+local hunters_aim = {}
+
+function GM:PostDrawTranslucentRenderables()
+	hunters_aim = {}
+	self:GetHuntersAim()
+
+	-- When "ph_hunter_aim_laser" set to 0, nobody can see the beam
+	-- set to 1 == spectator only, set to 2 == props and spectator
+	-- Also, we don't want the hunters to see the ray, to prevent eventual visual bugs
+	local visibility = GetConVar("ph_hunter_aim_laser"):GetInt()
+
+	if visibility == 0 then return end
+
+	if visibility == 1 and not LocalPlayer():IsSpectator() then return end
+	if visibility == 2 and not (LocalPlayer():IsSpectator() or LocalPlayer():IsProp()) then return end
+
+	for _, h_aim in pairs(hunters_aim) do
+		render.SetMaterial(beamMat)
+		render.DrawBeam(h_aim.eye_pos, h_aim.looking.HitPos, ray_width, 0, 1, ray_color)
+
+		render.SetMaterial(dotMat)
+		local size = math.random(8, 16)
+		render.DrawQuadEasy(h_aim.looking.HitPos + h_aim.looking.HitNormal, h_aim.looking.HitNormal, size, size, dot_color, 0)
+	end
+end
+
+function GM:GetHuntersAim()
+	for _, ply in pairs(player.GetAll()) do
+		if ply:IsHunter() then
+			local t = {}
+			t.eye_pos = ply:EyePos()
+			t.looking = ply:GetEyeTrace()
+			table.insert(hunters_aim, t)
+		end
+	end
+end
+
+-- former cl_chatmsg.lua
+net.Receive("ph_chatmsg", function(len)
+	local tbl = net.ReadTable()
+	chat.AddText(unpack(tbl))
+end)
+
+-- former cl_fixplayercolor
+local EntityMeta = FindMetaTable("Entity")
+
+function EntityMeta:GetPlayerColor()
+	return self:GetNWVector("playerColor") || Vector()
+end
+
+matproxy.Add({
+	name = "PlayerColor",
+	init = function(self, mat, values)
+		-- Store the name of the variable we want to set
+		self.ResultTo = values.resultvar
+	end,
+	bind = function(self, mat, ent)
+		if !IsValid(ent) then return end
+
+		if ent.GetPlayerColorOverride then -- clientside entities can't override functions, so we need an additional one for it
+			local col = ent:GetPlayerColorOverride()
+			if isvector(col) then
+				mat:SetVector(self.ResultTo, col)
+			end
+		elseif ent.GetPlayerColor then
+			local col = ent:GetPlayerColor()
+			if isvector(col) then
+				mat:SetVector(self.ResultTo, col)
+			end
+		else
+			mat:SetVector(self.ResultTo, Vector(62.0 / 255.0, 88.0 / 255.0, 106.0 / 255.0))
+		end
+	end
+})
+
+-- former cl_health
+local PlayerMeta = FindMetaTable("Player")
+
+function PlayerMeta:GetHMaxHealth()
+	return self:GetNWFloat("HMaxHealth", 100) || 100
+end
+
+-- former cl_spectate.lua
+net.Receive("spectating_status", function(length)
+	GAMEMODE.SpectateMode = net.ReadInt(8)
+	GAMEMODE.Spectating = false
+	GAMEMODE.Spectatee = nil
+	if GAMEMODE.SpectateMode >= 0 then
+		GAMEMODE.Spectating = true
+		GAMEMODE.Spectatee = net.ReadEntity()
+	end
+
+end)
+
+function GM:IsCSpectating()
+	return self.Spectating
+end
+
+function GM:GetCSpectatee()
+	return self.Spectatee
+end
+
+function GM:GetCSpectateMode()
+	return self.SpectateMode
+end
+
+-- formar cl_ragdoll.lua
+local PlayerMeta = FindMetaTable("Player")
+local EntityMeta = FindMetaTable("Entity")
+
+if !PlayerMeta.GetRagdollEntityOld then
+	PlayerMeta.GetRagdollEntityOld = PlayerMeta.GetRagdollEntity
+end
+
+function PlayerMeta:GetRagdollEntity()
+	local ent = self:GetNWEntity("DeathRagdoll")
+	if IsValid(ent) then
+		return ent
+	end
+
+	return self:GetRagdollEntityOld()
+end
+
+if !EntityMeta.GetRagdollOwnerOld then
+	EntityMeta.GetRagdollOwnerOld = EntityMeta.GetRagdollOwner
+end
+
+function EntityMeta:GetRagdollOwner()
+	local ent = self:GetNWEntity("RagdollOwner")
+	if IsValid(ent) then
+		return ent
+	end
+
+	return self:GetRagdollOwnerOld()
+end
+
+--former cl_killfeed.lua
 local killFeedEvents = {}
 
 local KILL_FEED_MESSAGE_TIMEOUT = 10 -- How long a message stays in the kill feed before starting to fade away.
