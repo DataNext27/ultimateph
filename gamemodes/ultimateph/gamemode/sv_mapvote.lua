@@ -127,10 +127,10 @@ function GM:StartMapVote()
 	local initHookTbl = hook.GetTable().Initialize
 	if initHookTbl && initHookTbl.MapVoteConfigSetup then
 		self:SetGameState(ROUND_MAPVOTE)
-		MapVote.Start()
+			MapVote.Start()
 		return
 	end
-
+	
 	-- allow developers to override builtin mapvote
 	if hook.GetTable().PHStartMapVote then
 		self:SetGameState(ROUND_MAPVOTE)
@@ -250,4 +250,3 @@ concommand.Add("ph_votemap", function(ply, com, args)
 		GAMEMODE:NetworkMapVotes()
 	end
 end)
-

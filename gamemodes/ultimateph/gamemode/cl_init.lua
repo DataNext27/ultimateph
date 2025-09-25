@@ -76,13 +76,10 @@ function GM:CalcView(ply, pos, angles, fov)
 			local mins = ply:GetNWVector("disguiseMins")
 			local view = {}
 			local reach = (maxs.z - mins.z)
-			
 			if reach <= GetConVar("ph_props_camdistance_min"):GetInt() then 
 				reach = GetConVar("ph_props_camdistance_min"):GetInt() 
 			end
-			
 			reach = reach * GetConVar("ph_props_camdistance_mult"):GetInt()
-			
 			if reach >= GetConVar("ph_props_camdistance_max"):GetInt() then
 				reach = GetConVar("ph_props_camdistance_max"):GetInt()
 			end
@@ -115,6 +112,7 @@ function GM:CalcView(ply, pos, angles, fov)
 			endpos = pos - angles:Forward() * 100,
 			mins = Vector( -4, -4, -4 ),
 			maxs = Vector( 4, 4, 4 ),
+			whitelist = true,
 		}
 
 		if trace.Hit then
@@ -123,7 +121,7 @@ function GM:CalcView(ply, pos, angles, fov)
 			pos = pos - angles:Forward() * 100
 		end
 
-		return { origin=pos, angles=angles, drawviewer=true }
+		return { origin=pos, angles=angles }
 	end
 end
 

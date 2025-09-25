@@ -30,8 +30,8 @@ function PlayerMeta:IsProp() return self:Team() == TEAM_PROP end
 GM.GameState = GAMEMODE && GAMEMODE.GameState || ROUND_WAIT
 
 team.SetUp(TEAM_SPEC, "Spectators", Color(120, 120, 120), false) -- Setting Joinable to false allows us to use team.BestAutoJoinTeam and have it only include the Hunters/Props teams.
-team.SetUp(TEAM_HUNTER, "Hunters", Color(255, 150, 50))
-team.SetUp(TEAM_PROP, "Props", Color(50, 150, 255))
+team.SetUp(TEAM_HUNTER, "Hunters", Color(138, 173, 244))
+team.SetUp(TEAM_PROP, "Props", Color(237, 135, 150))
 
 function GM:GetGameState()
 	return self.GameState

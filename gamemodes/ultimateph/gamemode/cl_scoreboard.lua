@@ -1,8 +1,31 @@
-﻿if GAMEMODE && IsValid(GAMEMODE.ScoreboardPanel) then
+if GAMEMODE && IsValid(GAMEMODE.ScoreboardPanel) then
 	GAMEMODE.ScoreboardPanel:Remove()
 end
 
 local menu
+include("cl_colors.lua")
+
+GroupColors = {}
+GroupColors["owner"] = PHGreen
+GroupColors["superadmin"] = PHPink
+GroupColors["headadmin"] = PHMauve
+GroupColors["admin"] = PHYellow
+GroupColors["moderator"] = PHBlue
+GroupColors["operator"] = PHPink
+GroupColors["superowner"] = PHRed
+GroupColors["trusted"] = PHPeach
+GroupColors["user"] = PHTeal
+
+GroupNames = {}
+GroupNames["owner"] = "Owner"
+GroupNames["superadmin"] = "Super Admin"
+GroupNames["headadmin"] = "Head Admin"
+GroupNames["admin"] = "Admin"
+GroupNames["moderator"] = "Moderator"
+GroupNames["operator"] = "Operator"
+GroupNames["superowner"] = "Super Owner"
+GroupNames["trusted"] = "Trusted"
+GroupNames["user"] = "User"
 
 surface.CreateFont("ScoreboardPlayer" , {
 	font = "coolvetica",
@@ -12,12 +35,6 @@ surface.CreateFont("ScoreboardPlayer" , {
 	italic = false
 })
 
-local function colMul(color, mul)
-	color.r = math.Clamp(math.Round(color.r * mul), 0, 255)
-	color.g = math.Clamp(math.Round(color.g * mul), 0, 255)
-	color.b = math.Clamp(math.Round(color.b * mul), 0, 255)
-end
-
 local muted = Material("icon32/muted.png", "noclamp")
 local skull = Material("husklesph/skull.png", "noclamp")
 
@@ -25,12 +42,17 @@ local function addPlayerItem(self, mlist, ply, pteam)
 	local but = vgui.Create("DButton")
 	but.player = ply
 	but.ctime = CurTime()
-	but:SetTall(draw.GetFontHeight("RobotoHUD-20") + 4)
+	but:SetTall(draw.GetFontHeight("RobotoHUD-20"))
 	but:SetText("")
 
 	function but:Paint(w, h)
-		surface.SetDrawColor(color_black)
-
+		if GroupColors[ply:GetUserGroup()] ~= nil then
+			surface.SetDrawColor(Color(GroupColors[ply:GetUserGroup()].r, GroupColors[ply:GetUserGroup()].g, GroupColors[ply:GetUserGroup()].b))
+		else 
+			surface.SetDrawColor(PHGreen)
+		end
+		self:DrawFilledRect()
+		
 		if IsValid(ply) && ply:IsPlayer() then
 			local s = 4
 			if !ply:Alive() then
@@ -39,7 +61,7 @@ local function addPlayerItem(self, mlist, ply, pteam)
 				surface.DrawTexturedRect(s, h / 2 - 16, 32, 32)
 				s = s + 32 + 4
 			end
-
+			
 			if ply:IsMuted() then
 				surface.SetMaterial(muted)
 
@@ -50,8 +72,14 @@ local function addPlayerItem(self, mlist, ply, pteam)
 			end
 
 			local col = color_white
-			draw.ShadowText(ply:Ping(), "RobotoHUD-L20", w - 4, 0, col, 2)
-			draw.ShadowText(ply:Nick(), "RobotoHUD-L20", s, 0, col, 0)
+			draw.SimpleText(ply:Ping(), "RobotoHUD-L20", w - 4, 0, col, 2)
+			if GroupNames[ply:GetUserGroup()] then
+				draw.SimpleText("["..GroupNames[ply:GetUserGroup()].."]", "RobotoHUD-L20", s, 0, PHDarkest, 0)
+				s = s + surface.GetTextSize("["..GroupNames[ply:GetUserGroup()].."]") + 4
+				draw.SimpleText(ply:Nick(), "RobotoHUD-L20", s, 0, col, 0)
+			else
+				draw.SimpleText(ply:Nick(), "RobotoHUD-L20", s, 0, col, 0)
+			end
 		end
 	end
 
@@ -100,12 +128,11 @@ local function makeTeamList(parent, pteam)
 	local hs = math.Round(draw.GetFontHeight("RobotoHUD-25") * 1.1)
 
 	function pnl:Paint(w, h)
-		surface.SetDrawColor(220, 220, 220, 50)
-		surface.SetDrawColor(68, 68, 68, 120)
+		surface.SetDrawColor(PHDarkest)
 		surface.DrawLine(0, hs, 0, h - 1)
 		surface.DrawLine(w - 1, hs, w - 1, h - 1)
 		surface.DrawLine(0, h - 1, w, h - 1)
-		surface.SetDrawColor(55, 55, 55, 120)
+		surface.SetDrawColor(PHDarker)
 		surface.DrawRect(1, hs, w - 2, h - hs)
 	end
 
@@ -123,8 +150,8 @@ local function makeTeamList(parent, pteam)
 
 	function headp:Paint(w, h)
 		surface.SetDrawColor(68, 68, 68, 255)
-		draw.RoundedBoxEx(4, 0, 0, w, h, Color(68, 68, 68, 120), true, true, false, false)
-		draw.ShadowText(team.GetName(pteam), "RobotoHUD-25", 6, 0, team.GetColor(pteam), 0)
+		draw.RoundedBoxEx(4, 0, 0, w, h, PHDarkest, true, true, false, false)
+		draw.SimpleText(team.GetName(pteam), "RobotoHUD-25", 6, 0, team.GetColor(pteam), 0)
 	end
 
 	local but = vgui.Create("DButton", headp)
@@ -155,7 +182,7 @@ local function makeTeamList(parent, pteam)
 			col.b = col.b * 1.2
 		end
 
-		draw.ShadowText("Join team", "RobotoHUD-20", 2, h / 2 - th / 2, col, 0)
+		draw.SimpleText("Join team", "RobotoHUD-20", 2, h / 2 - th / 2, col, 0)
 	end
 
 	mlist = vgui.Create("DScrollPanel", pnl)
@@ -179,8 +206,8 @@ local function makeTeamList(parent, pteam)
 	local col = Color(190, 190, 190)
 
 	function head:Paint(w, h)
-		draw.ShadowText("Name", "RobotoHUD-15", 4, 0, col, 0)
-		draw.ShadowText("Ping", "RobotoHUD-15", w - 4, 0, col, 2)
+		draw.SimpleText("Name", "RobotoHUD-15", 4, 0, col, 0)
+		draw.SimpleText("Ping", "RobotoHUD-15", w - 4, 0, col, 2)
 	end
 
 	mlist:AddItem(head)
@@ -213,29 +240,11 @@ local function createScoreboardPanel()
 	end
 
 	function menu:Paint(w, h)
-		surface.SetDrawColor(40, 40, 40, 230)
+		surface.SetDrawColor(0, 0, 0, 0)
 		surface.DrawRect(0, 0, w, h)
 	end
-
-	menu.Credits = vgui.Create("DPanel", menu)
-	menu.Credits:Dock(TOP)
-	menu.Credits:DockMargin(0, 0, 0, 4)
-
-	function menu.Credits:Paint(w, h)
-		surface.SetFont("RobotoHUD-25")
-		local t = GAMEMODE.Name || ""
-		local tw = surface.GetTextSize(t)
-		draw.ShadowText(t, "RobotoHUD-25", 4, 0, Color(199, 49, 29), 0)
-		draw.ShadowText(tostring(GAMEMODE.Version || "error") .. ", maintained by DataNext, code by many cool people :)", "RobotoHUD-L12", 4 + tw + 24, h  * 0.9, Color(220, 220, 220), 0, 4)
-	end
-
-	function menu.Credits:PerformLayout()
-		surface.SetFont("RobotoHUD-25")
-		local _, h = surface.GetTextSize(GAMEMODE.Name || "")
-		self:SetTall(h)
-	end
-
-	local bottom = vgui.Create("DPanel", menu)
+	
+    local bottom = vgui.Create("DPanel", menu)
 	bottom:SetTall(draw.GetFontHeight("RobotoHUD-15") * 1.3)
 	bottom:Dock(BOTTOM)
 	bottom:DockMargin(0, 8, 0, 0)
@@ -244,6 +253,7 @@ local function createScoreboardPanel()
 	local tw = surface.GetTextSize("Spectate")
 
 	function bottom:Paint(w, h)
+		draw.RoundedBox(0, 0, 0, w, h, PHDarker)
 		local c
 		for k, ply in pairs(team.GetPlayers(TEAM_SPEC)) do
 			if c then
@@ -264,17 +274,16 @@ local function createScoreboardPanel()
 	but:DockMargin(0, 0, 4, 0)
 	but:SetWide(tw + 8)
 
-	function but:Paint(w, h)
-		local col = Color(90, 90, 90, 160)
-		local colt = Color(190, 190, 190)
-		if self:IsDown() then
-			colMul(colt, 0.5)
-		elseif self:IsHovered() then
-			colMul(colt, 1.2)
-		end
+	function but:Paint(w, h)	
+	local col = PHWhite
+	if self:IsDown() then
+		col = PHLessWhite
+	elseif self:IsHovered() then
+		col = PHLessWhite
+	end
 
-		draw.RoundedBox(4, 0, 0, w, h, col)
-		draw.ShadowText("Spectate", "RobotoHUD-15", w / 2, h / 2, colt, 1, 1)
+		draw.RoundedBox(0, 0, 0, w, h, PHDarkest)
+		draw.SimpleText("Spectate", "RobotoHUD-15", w / 2, h / 2, col, 1, 1)
 	end
 
 	function but:DoClick()
@@ -285,7 +294,7 @@ local function createScoreboardPanel()
 	main:Dock(FILL)
 
 	function main:Paint(w, h)
-		surface.SetDrawColor(40, 40, 40, 230)
+		surface.SetDrawColor(40, 40, 40, 0)
 	end
 
 	menu.HuntersList = makeTeamList(main, TEAM_HUNTER)
@@ -306,16 +315,12 @@ end
 function GM:ScoreboardHide()
 	if IsValid(menu) then
 		menu:Close()
+		DermaMenu()
 	end
 end
 
 function GM:DoScoreboardActionPopup(ply)
 	local actions = DermaMenu()
-
-	if ply:IsAdmin() then
-		local admin = actions:AddOption("Is an Admin")
-		admin:SetIcon("icon16/shield.png")
-	end
 
 	if ply != LocalPlayer() then
 		local t = "Mute"
@@ -329,6 +334,29 @@ function GM:DoScoreboardActionPopup(ply)
 		function mute:DoClick()
 			if IsValid(ply) then
 				ply:SetMuted(!ply:IsMuted())
+			end
+		end
+	end
+
+	local t = "View Steam Profile"
+	local steamprofile = actions:AddOption(t)
+	steamprofile:SetIcon("icon16/application.png")
+
+	function steamprofile:DoClick()
+		if IsValid(ply) then
+			gui.OpenURL("https://steamcommunity.com/profiles/".. ply:SteamID64())
+		end
+	end
+
+-- this requires ulx
+	if LocalPlayer():IsAdmin() then
+		local t = "Force Team Switch"
+		local switchteams = actions:AddOption(t)
+		switchteams:SetIcon("icon16/shield.png")
+
+		function switchteams:DoClick()
+			if IsValid(ply) then
+				LocalPlayer():ConCommand("ulx teamswitch ".. ply:Nick())
 			end
 		end
 	end

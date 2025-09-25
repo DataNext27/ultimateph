@@ -18,6 +18,7 @@ The aim of the props is to hide from the hunters and not get killed.
 ]]
 
 local menu
+include("cl_colors.lua")
 
 local function createHelpMenu()
 	menu = vgui.Create("DFrame")
@@ -27,12 +28,35 @@ local function createHelpMenu()
 	menu:MakePopup()
 	menu:SetKeyboardInputEnabled(false)
 	menu:SetDeleteOnClose(false)
-	menu:ShowCloseButton(true)
+	menu:ShowCloseButton(false)
 	menu:SetTitle("")
 	menu:SetVisible(false)
 
+	local closeButton = vgui.Create('DButton', menu)
+	closeButton:SetFont('marlett')
+	closeButton:SetText('r')
+	closeButton.Paint = function(s,w,h)
+		draw.RoundedBox(0,0,0,w,h,Color(PHDarkest.r, PHDarkest.g, PHDarkest.b, 0))
+	end
+	closeButton.OnCursorEntered = function()
+		closeButton.Paint = function(s,w,h)
+			draw.RoundedBox(0,0,0,w,h,Color(PHDarker.r, PHDarker.g, PHDarker.b, 245))
+		end
+	end
+	closeButton.OnCursorExited = function()
+		closeButton.Paint = function(s,w,h)
+			draw.RoundedBox(0,0,0,w,h,Color(PHDarkest.r, PHDarkest.g, PHDarkest.b, 0))
+		end
+	end
+	closeButton:SetColor(PHWhite)
+	closeButton:SetSize(menu:GetWide() / 20, menu:GetTall() / 30)
+	closeButton:SetPos(menu:GetWide() / 1.05, 0)
+	closeButton.DoClick = function()
+		menu:Close()
+	end
+	
 	function menu:Paint(w, h)
-		surface.SetDrawColor(40, 40, 40, 230)
+		surface.SetDrawColor(PHDarker.r, PHDarker.g, PHDarker.b, 245)
 		surface.DrawRect(0, 0, w, h)
 		surface.SetFont("RobotoHUD-25")
 		draw.ShadowText("Help", "RobotoHUD-25", 8, 2, Color(132, 199, 29), 0)

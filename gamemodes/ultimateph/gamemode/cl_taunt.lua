@@ -1,14 +1,9 @@
 include("sh_taunt.lua")
+include("cl_colors.lua")
 
 local menu
 local lastCursorX
 local lastCursorY
-
-local function colMul(color, mul)
-	color.r = math.Clamp(math.Round(color.r * mul), 0, 255)
-	color.g = math.Clamp(math.Round(color.g * mul), 0, 255)
-	color.b = math.Clamp(math.Round(color.b * mul), 0, 255)
-end
 
 local function saveCursor()
 	lastCursorX, lastCursorY = input.GetCursorPos()
@@ -41,11 +36,12 @@ local function fillList(mlist, taunts, cat)
 		but:SetText("")
 
 		function but:Paint(w, h)
-			local col = Color(255, 255, 255)
 			if self:IsDown() then
-				colMul(col, 0.5)
+				col = PHLesserWhite
 			elseif self:IsHovered() then
-				colMul(col, 0.8)
+				col = PHLesserWhite
+			else
+				col = PHWhite
 			end
 			draw.ShadowText(t.name, "RobotoHUD-L15", 0, h / 2, col, 0, 1)
 			draw.ShadowText(math.Round(t.soundDuration * 10) / 10 .. "s", "RobotoHUD-L10", w, h / 2, col, 2, 1)
@@ -72,17 +68,16 @@ local function addCat(clist, name, taunts, mlist)
 	but.CatName = name
 
 	function but:Paint(w, h)
-		local col = Color(68, 68, 68, 160)
-		local colt = Color(190, 190, 190)
+		local colt = PHWhite
 		if !self.Selected then
-			colMul(col, 0.7)
+			col = Color(PHDarker.r, PHDarker.g, PHDarker.b)
 			if self:IsDown() then
-				colMul(colt, 0.5)
+				col = Color(PHDarker.r, PHDarker.g, PHDarker.b)
 			elseif self:IsHovered() then
-				colMul(colt, 1.2)
+				col = Color(PHDark.r, PHDark.g, PHDark.b)
 			end
 		else
-			colMul(colt, 1.2)
+			col = Color(PHDark.r, PHDark.g, PHDark.b)
 		end
 
 		draw.RoundedBoxEx(4, 0, 0, w, h, col, true, false, true, false)
@@ -138,17 +133,40 @@ local function openTauntMenu()
 	menu:SetKeyboardInputEnabled(false)
 	menu:SetDeleteOnClose(false)
 	menu:SetDraggable(false)
-	menu:ShowCloseButton(true)
+	menu:ShowCloseButton(false)
 	menu:DockPadding(8, 8 + draw.GetFontHeight("RobotoHUD-25"), 8, 8)
+	
+	local closeButton = vgui.Create('DButton', menu)
+	closeButton:SetFont('marlett')
+	closeButton:SetText('r')
+	closeButton.Paint = function(s,w,h)
+		draw.RoundedBox(0,0,0,w,h,Color(PHDarkest.r, PHDarkest.g, PHDarkest.b))
+	end
+	closeButton.OnCursorEntered = function()
+		closeButton.Paint = function(s,w,h)
+			draw.RoundedBox(0,0,0,w,h,Color(PHDarker.r, PHDarker.g, PHDarker.b))
+		end
+	end
+	closeButton.OnCursorExited = function()
+		closeButton.Paint = function(s,w,h)
+			draw.RoundedBox(0,0,0,w,h,Color(PHDarkest.r, PHDarkest.g, PHDarkest.b))
+		end
+	end
+	closeButton:SetColor(PHWhite)
+	closeButton:SetSize(menu:GetWide() / 20, menu:GetTall() / 30)
+	closeButton:SetPos(menu:GetWide() / 1.05, 0)
+	closeButton.DoClick = function()
+		menu:Close()
+	end
 
 	function menu:Paint(w, h)
-		surface.SetDrawColor(40, 40, 40, 230)
+		surface.SetDrawColor(PHDarkest.r, PHDarkest.g, PHDarkest.b)
 		surface.DrawRect(0, 0, w, h)
 		surface.SetFont("RobotoHUD-25")
 		local t = "Taunts"
 		local tw, th = surface.GetTextSize(t)
-		draw.ShadowText(t, "RobotoHUD-25", 8, 2, Color(49, 142, 219), 0)
-		draw.ShadowText(TauntMenuPhrase, "RobotoHUD-L15", 8 + tw + 16, 2 + th * 0.90, Color(220, 220, 220), 0, 4)
+		draw.SimpleText(t, "RobotoHUD-25", 8, 2, PHBlue, 0)
+		draw.SimpleText(TauntMenuPhrase, "RobotoHUD-L15", 8 + tw + 16, 2 + th * 0.90, PHWhite, 0, 4)
 	end
 
 	local leftpnl = vgui.Create("DPanel", menu)
@@ -165,12 +183,13 @@ local function openTauntMenu()
 	but:SetText("")
 
 	function but:Paint(w, h)
-		local col = Color(68, 68, 68, 160)
-		local colt = Color(190, 190, 190)
+		local colt = PHWhite
 		if self:IsDown() then
-			colMul(colt, 0.5)
+			col = Color(PHDark.r, PHDark.g, PHDark.b)
 		elseif self:IsHovered() then
-			colMul(colt, 1.2)
+			col = Color(PHDark.r, PHDark.g, PHDark.b)
+		else
+			col = Color(PHDarker.r, PHDarker.g, PHDarker.b)
 		end
 
 		draw.RoundedBoxEx(4, 0, 0, w, h, col, true, true, true, true)
@@ -204,9 +223,9 @@ local function openTauntMenu()
 	mlist:Dock(FILL)
 
 	function mlist:Paint(w, h)
-		surface.SetDrawColor(68, 68, 68, 160)
+		surface.SetDrawColor(PHDarkest.r, PHDarkest.g, PHDarkest.b)
 		surface.DrawOutlinedRect(0, 0, w, h)
-		surface.SetDrawColor(55, 55, 55, 120)
+		surface.SetDrawColor(PHDarker.r, PHDarker.g, PHDarker.b)
 		surface.DrawRect(1, 1, w - 2, h - 2)
 	end
 

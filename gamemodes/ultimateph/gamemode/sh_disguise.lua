@@ -107,6 +107,10 @@ function PlayerMeta:CalculateRotatedDisguiseMinsMaxs()
 end
 
 function PlayerMeta:DisguiseRotationLocked()
+	if !self:IsDisguised() then
+		return self:GetNWBool("undisguiseRotationLock")
+	end
+	
 	return self:GetNWBool("disguiseRotationLock")
 end
 
@@ -141,3 +145,17 @@ function GM:PlayerCanDisguiseCurrentTarget(ply)
 
 	return false, nil
 end
+
+hook.Add('UpdateAnimation', 'PropUndisguiseLock', function(ply)
+	if ply:IsDisguised() or !GAMEMODE.PropTpose:GetBool() or !ply:GetNWBool("undisguiseRotationLock") then
+		return
+	end
+
+	local ang = ply:GetNWAngle("undisguiseRotationLockAng")
+
+	if ang == ply:GetRenderAngles() then
+		return
+	end
+	
+	ply:SetRenderAngles(ang)
+end)

@@ -3,6 +3,7 @@ include("sv_awards.lua")
 util.AddNetworkString("gamestate")
 util.AddNetworkString("round_victor")
 util.AddNetworkString("gamerules")
+util.AddNetworkString("rounds")
 
 GM.GameState = GAMEMODE && GAMEMODE.GameState || ROUND_WAIT
 GM.StateStart = GAMEMODE && GAMEMODE.StateStart || CurTime()
@@ -146,6 +147,9 @@ function GM:SetupRound()
 
 	self:CleanupMap()
 	self.Rounds = self.Rounds + 1
+	net.Start("rounds")
+	net.WriteInt(self.Rounds, 5)
+	net.Broadcast()
 
 	if self.Rounds == self.RoundLimit:GetInt() then
 		GlobalChatMsg(Color(255, 0, 0), "This is the LAST ROUND!")
@@ -324,4 +328,3 @@ local function ForceEndRound(ply, command, args)
 	end
 end
 concommand.Add("ph_endround", ForceEndRound)
-

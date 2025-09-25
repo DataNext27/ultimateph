@@ -1,3 +1,4 @@
+include("cl_colors.lua")
 local function createRoboto(s)
 	surface.CreateFont("RobotoHUD-" .. s , {
 		font = "Roboto-Bold",
@@ -49,7 +50,7 @@ function GM:DrawGameHUD()
 		ply = self:GetCSpectatee()
 	end
 
-	self:DrawHealth(ply)
+--	self:DrawHealth(ply)
 
 	if ply != LocalPlayer() then
 		local col = team.GetColor(ply:Team())
@@ -111,102 +112,8 @@ end
 
 local polyTex = surface.GetTextureID("VGUI/white.vmt")
 
-local function drawPoly(x, y, w, h, percent)
-	local points = 40
-	if percent > 0.5 then
-		local vertexes = {}
-		local hpoints = points / 2
-		local base = math.pi * 1.5
-		local mul = 1 / hpoints * math.pi
-		for i = (1 - percent) * 2 * hpoints, hpoints do
-			table.insert(vertexes, {x = x + w / 2 + math.cos(i * mul + base) * w / 2, y = y + h / 2 + math.sin(i * mul + base) * h / 2})
-		end
-
-		table.insert(vertexes, {x = x + w / 2, y = y + h})
-		table.insert(vertexes, {x = x + w / 2, y = y + h / 2})
-
-		surface.SetTexture(polyTex)
-		surface.DrawPoly(vertexes)
-	end
-
-	local vertexes = {}
-	local hpoints = points / 2
-	local base = math.pi * 0.5
-	local mul = 1 / hpoints * math.pi
-	local p = 0
-	if percent < 0.5 then
-		p = (1 - percent * 2)
-	end
-
-	for i = p * hpoints, hpoints do
-		table.insert(vertexes, {x = x + w / 2 + math.cos(i * mul + base) * w / 2, y = y + h / 2 + math.sin(i * mul + base) * h / 2})
-	end
-	table.insert(vertexes, {x = x + w / 2, y = y})
-	table.insert(vertexes, {x = x + w / 2, y = y + h / 2})
-
-	surface.SetTexture(polyTex)
-	surface.DrawPoly(vertexes)
-end
-
-function GM:DrawHealth(ply)
-	local x = 20
-	local w, h = math.ceil(ScrW() * 0.09), 80
-	h = w
-	local y = ScrH() - 20 - h
-	local ps = 0.05
-
-	surface.SetDrawColor(50, 50, 50, 180)
-	drawPoly(x, y, w, h, 1)
-
-	render.ClearStencil()
-	render.SetStencilEnable(true)
-	render.SetStencilFailOperation(STENCILOPERATION_KEEP)
-	render.SetStencilZFailOperation(STENCILOPERATION_KEEP)
-	render.SetStencilPassOperation(STENCILOPERATION_REPLACE)
-	render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_ALWAYS)
-	render.SetStencilWriteMask(1)
-	render.SetStencilTestMask(1)
-	render.SetStencilReferenceValue(1)
-	render.SetBlend(0)
-	render.OverrideDepthEnable(true, false)
-
-	surface.SetDrawColor(26, 120, 245, 1)
-	drawPoly(x + w * ps, y + h * ps, w * (1 - 2 * ps), h * (1 - 2 * ps), 1)
-
-	render.SetStencilEnable(true)
-	render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
-	render.SetStencilPassOperation(STENCILOPERATION_REPLACE)
-	render.SetStencilReferenceValue(1)
-
-	local health = ply:Health()
-	local maxhealth = math.max(health, ply:GetHMaxHealth())
-	local nh = math.Round((h - ps * 2) * math.Clamp(health / maxhealth, 0, 1))
-	local tcol = table.Copy(team.GetColor(ply:Team()))
-	tcol.a = 150
-	surface.SetDrawColor(tcol)
-	surface.DrawRect(x, y + h - ps - nh, w, nh)
-
-	draw.ShadowText(math.Round(health) .. "", "RobotoHUD-25", x + w / 2, y + h / 2, color_white, 1, 1)
-
-	render.SetStencilEnable(false)
-	render.SetStencilWriteMask(0)
-	render.SetStencilReferenceValue(0)
-	render.SetStencilTestMask(0)
-	render.SetStencilEnable(false)
-	render.OverrideDepthEnable(false)
-	render.SetBlend(1)
-
-	cam.IgnoreZ(false)
-
-	if ply:IsDisguised() && ply:DisguiseRotationLocked() then
-		local fg = draw.GetFontHeight("RobotoHUD-15")
-		draw.ShadowText("ROTATION", "RobotoHUD-15", x + w + 20, y + h / 2 - fg / 2, color_white, 0, 1)
-		draw.ShadowText("LOCK", "RobotoHUD-15", x + w + 20, y + h / 2 + fg / 2, color_white, 0, 1)
-	end
-end
-
 function GM:HUDShouldDraw(name)
-	if name == "CHudHealth" then return false end
+	if name == "CHudHealth" then return true end
 	if name == "CHudVoiceStatus" then return false end
 	if name == "CHudVoiceSelfStatus" then return false end
 
@@ -237,12 +144,18 @@ function GM:DrawRoundTimer()
 		local settings = self:GetRoundSettings()
 		local roundTime = settings.RoundTime || 5 * 60
 		local time = math.max(0, roundTime - self:GetStateRunningTime())
+		net.Receive("rounds", function(len)
+			self.rounds = net.ReadInt(5)
+		end)
+		if self.rounds == nil then
+			self.rounds = 1
+		end
 		local m = math.floor(time / 60)
 		local s = math.floor(time % 60)
 		m = tostring(m)
 		s = s < 10 && "0" .. s || tostring(s)
 		local fh = draw.GetFontHeight("RobotoHUD-L15") * 1
-		draw.ShadowText("Props win in", "RobotoHUD-L15", ScrW() / 2, 20, color_white, 1, 3)
+		draw.ShadowText("Round "..self.rounds.." / "..self.RoundLimit:GetInt(), "RobotoHUD-L15", ScrW() / 2, 20, color_white, 1, 3)
 		draw.ShadowText(m .. ":" .. s, "RobotoHUD-20", ScrW() / 2, fh + 20, color_white, 1, 3)
 	end
 end
@@ -256,3 +169,4 @@ function GM:PreDrawHUD()
 		end
 	end
 end
+

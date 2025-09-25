@@ -93,6 +93,7 @@ function PlayerMeta:UnDisguise()
 
 	self.PercentageHealth = nil
 	self:SetNWBool("disguised", false)
+	self:SetNWBool("undisguiseRotationLock", false)
 	self:SetColor(Color(255, 255, 255, 255))
 	self:SetNoDraw(false)
 	self:DrawShadow(true)
@@ -110,8 +111,13 @@ function PlayerMeta:UnDisguise()
 end
 
 function PlayerMeta:DisguiseLockRotation()
-	if !self:IsDisguised() then return end
-
+	if !self:IsDisguised() then
+		local ang = self:GetRenderAngles()
+		self:SetNWAngle("undisguiseRotationLockAng", ang)
+		self:SetNWBool("undisguiseRotationLock", true)
+		return
+	end
+	
 	local mins, maxs = self:CalculateRotatedDisguiseMinsMaxs()
 	local hullx = math.Round((maxs.x - mins.x) / 2)
 	local hully = math.Round((maxs.y - mins.y) / 2)
@@ -128,6 +134,11 @@ function PlayerMeta:DisguiseLockRotation()
 end
 
 function PlayerMeta:DisguiseUnlockRotation()
+	if !self:IsDisguised() then
+		self:SetNWBool("undisguiseRotationLock", false)
+		return
+	end
+	
 	local maxs = self:GetNWVector("disguiseMaxs")
 	local mins = self:GetNWVector("disguiseMins")
 	local hullxy = math.Round(math.Max(maxs.x - mins.x, maxs.y - mins.y) / 2)
@@ -142,8 +153,9 @@ function PlayerMeta:DisguiseUnlockRotation()
 end
 
 concommand.Add("ph_lockrotation", function(ply, com, args)
-	if !IsValid(ply) then return end
-	if !ply:IsDisguised() then return end
+	if !IsValid(ply) or ply:Team() ~= TEAM_PROP then 
+		return 
+	end
 
 	if ply:DisguiseRotationLocked() then
 		ply:DisguiseUnlockRotation()

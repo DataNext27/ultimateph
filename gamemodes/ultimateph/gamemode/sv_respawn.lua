@@ -3,7 +3,7 @@ function GM:CanRespawn(ply)
 		return false
 	end
 
-	if self:GetGameState() == ROUND_WAIT then
+	if self:GetGameState() == ROUND_WAIT or self:GetGameState() == ROUND_HIDE then
 		if ply.NextSpawnTime && ply.NextSpawnTime > CurTime() then return end
 
 		if ply:KeyPressed(IN_JUMP) || ply:KeyPressed(IN_ATTACK) then
