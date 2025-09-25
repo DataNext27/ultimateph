@@ -34,7 +34,7 @@ GM.AutoTauntMin = CreateConVar("ph_auto_taunt_delay_min", 60, bit.bor(FCVAR_ARCH
 GM.AutoTauntMax = CreateConVar("ph_auto_taunt_delay_max", 120, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Maximum time to go without taunting")
 GM.AutoTauntPropsOnly = CreateConVar("ph_auto_taunt_props_only", 1, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Enable auto taunt for props only")
 
-GM.Secrets =  CreateConVar("ph_secrets", 0, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Enable secrets")
+GM.Secrets = CreateConVar("ph_secrets", 0, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Enable secrets")
 
 GM.WalkSpeed = CreateConVar("ph_walk_speed", 200, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Walk Speed")
 GM.RunSpeed = CreateConVar("ph_run_speed", 150, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Run Speed")

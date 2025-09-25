@@ -109,10 +109,6 @@ function PlayerMeta:CalculateSpeed()
 			settings.walkSpeed = settings.walkSpeed * mul
 		end
 
-		if settings.runSpeed > settings.walkSpeed then
-			settings.runSpeed = settings.walkSpeed
-		end
-
 		settings.jumpPower = settings.jumpPower * GAMEMODE.PropsJumpPower:GetFloat()
 	end
 
@@ -186,16 +182,7 @@ local function removeModel(model)
 	end
 end
 
--- local defaultPlayerModels = {"male01", "male02", "male03", "male04", "male05", "male06", "male07", "male08", "male09", "female01", "female02", "female03", "female04", "female05", "female06", "refugee01", "refugee02", "refugee03", "refugee04"}
 local function removeBasicDefaultModels()
-	-- for k, p in pairs(playerModels) do
-	-- 	for r, m in pairs(defaultPlayerModels) do
-	-- 		if p.model == m then
-	-- 			table.remove(playerModels, k)
-	-- 		end
-	-- 	end
-	-- end
-
 	removeModel("male01")
 	removeModel("male02")
 	removeModel("male03")
@@ -411,14 +398,14 @@ local function pointsAroundSpawn(spwn)
 	-- all rigged positions
 	-- could be done without typing them out, but would take about as much time
 	return {
-		pos + Vector(w,  0,  0),
-		pos + Vector(0,  w,  0),
-		pos + Vector(w,  w,  0),
-		pos + Vector(-w,  0,  0),
-		pos + Vector(0, -w,  0),
-		pos + Vector(-w, -w,  0),
-		pos + Vector(-w,  w,  0),
-		pos + Vector(w, -w,  0)
+		pos + Vector(w, 0, 0),
+		pos + Vector(0, w, 0),
+		pos + Vector(w, w, 0),
+		pos + Vector(-w, 0, 0),
+		pos + Vector(0, -w, 0),
+		pos + Vector(-w, -w, 0),
+		pos + Vector(-w, w, 0),
+		pos + Vector(w, -w, 0)
 	}
 end
 
@@ -650,7 +637,7 @@ function GM:PlayerCanHearChatVoice(listener, talker, typ, teamOnly)
 		end
 	end
 
-	if sv_alltalk:GetBool() then
+	if sv_alltalk:GetInt() == 3 then -- sv_alltalk is not a bool. 0 = team only with poximity, 1 = team only without proximity, 2 = everybody with proxitiy, 3 = everybody without proximity
 		return true
 	end
 

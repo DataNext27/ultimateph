@@ -1,13 +1,14 @@
+include("cl_colors.lua")
 local PlayerMeta = FindMetaTable("Player")
 local tabFile = file.Read(GM.Folder .. "/ultimateph.txt", "GAME") || ""
 local tab = util.KeyValuesToTable(tabFile)
 
-GM.Name 	= tab["title"] || "Prop Hunters - Utlimate Edition"
-GM.Author 	= "DataNext, Zikaeroh, MechanicalMind"
+GM.Name = tab["title"] || "Prop Hunters - Utlimate Edition"
+GM.Author = "DataNext, Zikaeroh, MechanicalMind"
 -- Credits to waddlesworth for the logo and icon
 GM.Email 	= "N/A"
-GM.Website 	= "N/A"
-GM.Version  = tab["version"] || "unknown"
+GM.Website = "N/A"
+GM.Version = tab["version"] || "unknown"
 
 ROUND_WAIT = 1
 ROUND_HIDE = 2
@@ -29,9 +30,9 @@ function PlayerMeta:IsProp() return self:Team() == TEAM_PROP end
 
 GM.GameState = GAMEMODE && GAMEMODE.GameState || ROUND_WAIT
 
-team.SetUp(TEAM_SPEC, "Spectators", Color(120, 120, 120), false) -- Setting Joinable to false allows us to use team.BestAutoJoinTeam and have it only include the Hunters/Props teams.
-team.SetUp(TEAM_HUNTER, "Hunters", Color(138, 173, 244))
-team.SetUp(TEAM_PROP, "Props", Color(237, 135, 150))
+team.SetUp(TEAM_SPEC, "Spectators", PHWhite, false) -- Setting Joinable to false allows us to use team.BestAutoJoinTeam and have it only include the Hunters/Props teams.
+team.SetUp(TEAM_HUNTER, "Hunters", PHBlue)
+team.SetUp(TEAM_PROP, "Props", PHRed)
 
 function GM:GetGameState()
 	return self.GameState
@@ -61,30 +62,32 @@ function GM:PlayerSetHull(ply, hullx, hully, hullz, duckz)
 	end
 end
 
-function GM:EntityEmitSound( t )
-	if GetConVar("ph_hunter_deaf_onhiding"):GetBool() && self:GetGameState() == ROUND_HIDE then
-		for _, ply in pairs(player.GetAll()) do
-			if ply:IsHunter() then
-				return false
-			else
-				return nil
-			end
+function GM:EntityEmitSound(t)
+	if not GetConVar("ph_hunter_deaf_onhiding"):GetBool() or self:GetGameState() ~= ROUND_HIDE then
+		return
+	end
+
+	for _, ply in ipairs(player.GetHumans()) do -- ipairs is preferred when working with tables. player.GetHumans() to ignore bots
+		if not ply:IsHunter() then
+			continue -- if the player is not a hunter, ignore them
 		end
+
+		return false
 	end
 end
 
 function GM:PlayerFootstep( ply, pos, foot, sound, volume, filter )
-	if GetConVar("ph_props_silent_footsteps"):GetBool() then
-		if ply:IsProp() then
-			return true
-		end
+	if not GetConVar("ph_props_silent_footsteps"):GetBool() or not ply:IsProp() then
+		return
 	end
+
+	return true
 end
 
 hook.Add('CalcMainActivity', 'PropTpose', function(ply)
-	if GetConVar("ph_props_tpose"):GetBool() then
-		if ply:IsProp() then
-			return ACT_INVALID
-		end
+	if not GetConVar("ph_props_tpose"):GetBool() or not ply:IsProp() then
+		return
 	end
+
+	return ACT_INVALID
 end)
