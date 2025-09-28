@@ -1,5 +1,6 @@
 -- former shared.lua
-include("cl_colors.lua")
+include("sh_config.lua")
+
 local PlayerMeta = FindMetaTable("Player")
 local tabFile = file.Read(GM.Folder .. "/ultimateph.txt", "GAME") || ""
 local tab = util.KeyValuesToTable(tabFile)
@@ -32,8 +33,8 @@ function PlayerMeta:IsProp() return self:Team() == TEAM_PROP end
 GM.GameState = GAMEMODE && GAMEMODE.GameState || ROUND_WAIT
 
 team.SetUp(TEAM_SPEC, "Spectators", PHWhite, false) -- Setting Joinable to false allows us to use team.BestAutoJoinTeam and have it only include the Hunters/Props teams.
-team.SetUp(TEAM_HUNTER, "Hunters", PHBlue)
-team.SetUp(TEAM_PROP, "Props", PHRed)
+team.SetUp(TEAM_HUNTER, "Hunters", PHOrange)
+team.SetUp(TEAM_PROP, "Props", PHBlue)
 
 function GM:GetGameState()
 	return self.GameState

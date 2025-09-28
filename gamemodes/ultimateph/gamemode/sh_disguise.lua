@@ -147,7 +147,7 @@ function GM:PlayerCanDisguiseCurrentTarget(ply)
 end
 
 hook.Add('UpdateAnimation', 'PropUndisguiseLock', function(ply)
-	if ply:IsDisguised() or !GAMEMODE.PropTpose:GetBool() or !ply:GetNWBool("undisguiseRotationLock") then
+	if ply:IsDisguised() or not GAMEMODE.PropTpose:GetBool() or not ply:GetNWBool("undisguiseRotationLock") then
 		return
 	end
 
@@ -201,7 +201,7 @@ if CLIENT then
 		local b, err = pcall(renderDis, self)
 		cam.End3D()
 		if !b then
-			MsgC(Color(255, 0, 0), err .. "\n")
+			MsgC(PHRed, err .. "\n")
 		end
 	end
 	
@@ -210,10 +210,10 @@ if CLIENT then
 		if client:IsProp() then
 			local canDisguise, target = self:PlayerCanDisguiseCurrentTarget(client)
 			if canDisguise then
-				local col = Color(50, 220, 50)
+				local col = PHGreen
 				local hullxy, hullz = target:GetPropSize()
 				if !client:CanFitHull(hullxy, hullxy, hullz) then
-					col = Color(220, 50, 50)
+					col = PHRed
 				end
 				halo.Add({target}, col, 2, 2, 2, true, true)
 			end
@@ -249,7 +249,7 @@ if SERVER then
 	function PlayerMeta:DisguiseAsProp(ent)
 		local hullxy, hullz = ent:GetPropSize()
 		if !self:CanFitHull(hullxy, hullxy, hullz) then
-			self:PlayerChatMsg(Color(255, 50, 50), "Not enough room to change")
+			self:PlayerChatMsg(PHRed, "Not enough room to change")
 			return
 		end
 	
@@ -344,7 +344,7 @@ if SERVER then
 	end
 	
 	function PlayerMeta:DisguiseLockRotation()
-		if !self:IsDisguised() then
+		if not self:IsDisguised() then
 			local ang = self:GetRenderAngles()
 			self:SetNWAngle("undisguiseRotationLockAng", ang)
 			self:SetNWBool("undisguiseRotationLock", true)
@@ -377,7 +377,7 @@ if SERVER then
 		local hullxy = math.Round(math.Max(maxs.x - mins.x, maxs.y - mins.y) / 2)
 		local hullz = math.Round(maxs.z - mins.z)
 		if !self:CanFitHull(hullxy, hullxy, hullz) then
-			self:PlayerChatMsg(Color(255, 50, 50), "Not enough room to unlock rotation, move into a more open area")
+			self:PlayerChatMsg(PHRed, "Not enough room to unlock rotation, move into a more open area")
 			return
 		end
 	

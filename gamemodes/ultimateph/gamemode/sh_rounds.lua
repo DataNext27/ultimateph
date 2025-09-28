@@ -5,7 +5,6 @@ if SERVER then
 	util.AddNetworkString("gamestate")
 	util.AddNetworkString("round_victor")
 	util.AddNetworkString("gamerules")
-	util.AddNetworkString("rounds")
 	
 	GM.GameState = GAMEMODE && GAMEMODE.GameState || ROUND_WAIT
 	GM.StateStart = GAMEMODE && GAMEMODE.StateStart || CurTime()
@@ -70,6 +69,7 @@ if SERVER then
 	
 	function GM:SetGameState(state)
 		self.GameState = state
+		self.CurrentRound = self.Rounds
 		self.StateStart = CurTime()
 		self:NetworkGameState()
 	end
@@ -77,10 +77,11 @@ if SERVER then
 	function GM:NetworkGameState(ply)
 		net.Start("gamestate")
 		net.WriteUInt(self.GameState || ROUND_WAIT, 32)
+		net.WriteUInt(self.CurrentRound || 0, 7)
 		net.WriteDouble(self.StateStart || 0)
 		net.Broadcast()
 	end
-	
+
 	function GM:GetRoundSettings()
 		self.RoundSettings = self.RoundSettings || {}
 		return self.RoundSettings
@@ -149,12 +150,9 @@ if SERVER then
 	
 		self:CleanupMap()
 		self.Rounds = self.Rounds + 1
-		net.Start("rounds")
-		net.WriteInt(self.Rounds, 5)
-		net.Broadcast()
 	
 		if self.Rounds == self.RoundLimit:GetInt() then
-			GlobalChatMsg(Color(255, 0, 0), "This is the LAST ROUND!")
+			GlobalChatMsg(PHRed, "LAST ROUND!")
 	
 			if self.Secrets:GetBool() then
 				BroadcastLua("surface.PlaySound('husklesph/hphaaaaa2.mp3')")
@@ -351,6 +349,7 @@ if CLIENT then
 
 	net.Receive("gamestate", function(len)
 		GAMEMODE.GameState = net.ReadUInt(32)
+		GAMEMODE.CurrentRound = net.ReadUInt(7)
 		GAMEMODE.StateStart = net.ReadDouble()
 
 		if GAMEMODE.GameState == ROUND_HIDE then

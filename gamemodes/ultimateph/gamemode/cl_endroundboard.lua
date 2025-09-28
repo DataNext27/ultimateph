@@ -1,36 +1,31 @@
 local menu
-include("cl_colors.lua")
 
 local function createEndRoundMenu()
 	menu = vgui.Create("DFrame")
-	menu:SetSize(ScrW() * 0.4, ScrH() * 0.6)
+	menu:SetSize(ScrH() * 0.75, ScrH() * 0.75)
 	menu:Center()
 	menu:MakePopup()
+	menu:SetTitle("")
 	menu:ShowCloseButton(false)
 	menu:SetMouseInputEnabled(true)
 	menu:SetKeyboardInputEnabled(false)
-	menu:SetDeleteOnClose(false)
 	menu:SetDraggable(false)
+	menu:SetDeleteOnClose(false)
+	menu:DockPadding(math.Clamp(ScreenScaleH(2), 2, 4), ScreenScaleH(12) + math.Clamp(ScreenScaleH(2), 2, 4), math.Clamp(ScreenScaleH(2), 2, 4), math.Clamp(ScreenScaleH(2), 2, 4))
 
 	local closeButton = vgui.Create('DButton', menu)
-	closeButton:SetFont('marlett')
+	closeButton:SetFont('PHIcons')
 	closeButton:SetText('r')
 	closeButton.Paint = function(s,w,h)
-		draw.RoundedBox(0,0,0,w,h,Color(PHDarkest.r, PHDarkest.g, PHDarkest.b))
-	end
-	closeButton.OnCursorEntered = function()
-		closeButton.Paint = function(s,w,h)
-			draw.RoundedBox(0,0,0,w,h,Color(PHDarker.r, PHDarker.g, PHDarker.b))
-		end
-	end
-	closeButton.OnCursorExited = function()
-		closeButton.Paint = function(s,w,h)
-			draw.RoundedBox(0,0,0,w,h,Color(PHDarkest.r, PHDarkest.g, PHDarkest.b))
+		if not closeButton:IsHovered() then
+			draw.RoundedBox(0, 0, 0, w, h, Color(0,0,0,0))
+		else
+			draw.RoundedBox(0, 0, 0, w, h, PHEndDarker)
 		end
 	end
 	closeButton:SetColor(PHWhite)
-	closeButton:SetSize(menu:GetWide() / 20, menu:GetTall() / 40)
-	closeButton:SetPos(menu:GetWide() / 1.05, 0)
+	closeButton:SetSize(ScreenScaleH(16), ScreenScaleH(12))
+	closeButton:SetPos(math.Round(menu:GetWide() - closeButton:GetWide() - math.Clamp(ScreenScaleH(2), 2, 4)), math.Clamp(ScreenScaleH(2), 2, 4))
 	closeButton.DoClick = function()
 		menu:Close()
 	end
@@ -52,25 +47,20 @@ local function createEndRoundMenu()
 			surface.DrawTexturedRect(x * -1, y * -1, ScrW(), ScrH())
 		end
 
-		-- 2 pixel thick black border on the OUTSIDE of the panel
-		-- Temporarily disable clipping so we can draw outside the bounds of menu
-		surface.SetDrawColor(PHDarkest.r, PHDarkest.g, PHDarkest.b)
-		DisableClipping(true)
-		surface.DrawOutlinedRect(-1, -1, w + 2, h + 2)
-		surface.DrawOutlinedRect(-2, -2, w + 4, h + 4)
-		DisableClipping(false)
+		-- draw a scaling 2px outline, clamped to a maximum size of 4 pixels. also don't disable clipping and instead position the content inside the outline
+		surface.SetDrawColor(PHEndBlack)
+		surface.DrawOutlinedRect(0, 0, w, h, math.Clamp(ScreenScaleH(2), 2, 4))
 
-		-- Title bar rectangle (the title bar is always 22 pixels in height)
-		surface.SetDrawColor(PHDarkest.r, PHDarkest.g, PHDarkest.b)
-		surface.DrawRect(0, 0, w, 22)
+		-- Title bar rectangle (the title bar is a scaling 12px in height)
+		surface.SetDrawColor(PHEndDarkest)
+		surface.DrawRect(math.Clamp(ScreenScaleH(2), 2, 4), math.Clamp(ScreenScaleH(2), 2, 4), w - math.Clamp(ScreenScaleH(4), 4, 8), ScreenScaleH(12))
 
 		-- Light grey background on lower area
-		surface.SetDrawColor(PHDarker.r, PHDarker.g, PHDarker.b)
-		surface.DrawRect(0, 22, w, h)
-	end
+		surface.SetDrawColor(PHEndDarker)
+		surface.DrawRect(math.Clamp(ScreenScaleH(2), 2, 4), ScreenScaleH(12) + math.Clamp(ScreenScaleH(2), 2, 4), w - math.Clamp(ScreenScaleH(4), 4, 8), h - ScreenScaleH(12) - math.Clamp(ScreenScaleH(4), 4, 8))
 
-	menu.changeTitle = function(newTitle)
-		menu:SetTitle(newTitle)
+		-- title text
+		draw.SimpleText("Round Over!", 'RobotoHUD-12', math.Round((ScreenScaleH(12) / 8) + math.Clamp(ScreenScaleH(2), 2, 4)), (ScreenScaleH(12) + math.Clamp(ScreenScaleH(2), 2, 4)) / 2, PHLessWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	-- Results section (this is just a container for winner, awards, and resultsTimeLeft)
@@ -93,7 +83,7 @@ local function createEndRoundMenu()
 	menu.setWinningTeamText = function(winState)
 		if winState == WIN_NONE then
 			winner:SetText("Round tied")
-			winner:SetColor(PHWhite)
+			winner:SetColor(PHLessWhite)
 		else
 			winner:SetText(team.GetName(winState) .. " win!")
 			winner:SetColor(team.GetColor(winState))
@@ -106,7 +96,7 @@ local function createEndRoundMenu()
 
 	function awards:Paint(w, h)
 		-- Add a dark rectangle over the area for the awards to visually separate it from rest of the menu
-		surface.SetDrawColor(PHDark.r, PHDark.g, PHDark.b)
+		surface.SetDrawColor(PHEndDark) 
 		surface.DrawRect(0, 0, w, h)
 	end
 
@@ -116,7 +106,7 @@ local function createEndRoundMenu()
 	function canvas:OnChildAdded(child)
 		-- Awards fill from top to bottom
 		child:Dock(TOP)
-		child:DockMargin(10, 10, 10, 0)
+		child:DockMargin(ScreenScaleH(4), ScreenScaleH(4), ScreenScaleH(4), 0)
 	end
 
 	menu.setPlayerAwards = function(allAwards)
@@ -127,9 +117,8 @@ local function createEndRoundMenu()
 			containerPanel:SetTall(draw.GetFontHeight("RobotoHUD-20"))
 
 			function containerPanel:Paint(w, h)
-				surface.SetDrawColor(PHDarkest.r, PHDarkest.g, PHDarkest.b)
 				draw.DrawText(award.name, "RobotoHUD-10", 0, 0, PHWhite, 0)
-				draw.DrawText(award.desc, "RobotoHUD-10", 0, draw.GetFontHeight("RobotoHUD-10"), PHLesserWhite, 0)
+				draw.DrawText(award.desc, "RobotoHUD-10", 0, draw.GetFontHeight("RobotoHUD-10"), PHLessWhite, 0)
 				draw.DrawText(award.winnerName, "RobotoHUD-15", w, (h / 2) - (draw.GetFontHeight("RobotoHUD-20") / 2), team.GetColor(award.winnerTeam), 2)
 			end
 
@@ -137,22 +126,25 @@ local function createEndRoundMenu()
 		end
 	end
 
-	-- Timer at bottom right showing how long until next round
+	-- Timer at bottom right showing how long until next round/mapvote
 	local resultsTimeLeft = vgui.Create("DPanel", resultsPanel)
 	resultsTimeLeft:Dock(BOTTOM)
 	resultsTimeLeft:SetTall(draw.GetFontHeight("RobotoHUD-15"))
 
 	function resultsTimeLeft:Paint(w, h)
 		-- "Extend" the dark rectangle from awards:Paint to make a larger seamless rectangle
-		surface.SetDrawColor(PHDarker.r, PHDarker.g, PHDarker.b)
+		surface.SetDrawColor(PHEndDark)
 		surface.DrawRect(0, 0, w, h)
 
 		if GAMEMODE:GetGameState() == ROUND_POST then
 			local settings = GAMEMODE:GetRoundSettings()
-			local roundTime = settings.NextRoundTime || 30
+			local roundTime = settings.NextRoundTime or 30
 			local time = math.max(0, roundTime - GAMEMODE:GetStateRunningTime())
-			-- TODO: Say "Mapvote in..." if last round
-			draw.DrawText("Next round in " .. math.ceil(time), "RobotoHUD-15", w - 4, 0, PHWhite, 2)
+			if GAMEMODE.CurrentRound >= GAMEMODE.RoundLimit:GetInt() then
+				draw.DrawText("Map vote in " .. math.ceil(time), "RobotoHUD-15", w - ScreenScaleH(2), 0, PHLessWhite, 2)
+			else
+				draw.DrawText("Next round in " .. math.ceil(time), "RobotoHUD-15", w - ScreenScaleH(2), 0, PHLessWhite, 2)
+			end
 		end
 	end
 
@@ -171,18 +163,20 @@ local function createEndRoundMenu()
 	menu.MapVoteList = mapList
 	mapList:Dock(FILL)
 	mapList:DockMargin(0, 0, 0, 0)
+	local vbar = mapList:GetVBar()
+	vbar:SetWide(0)
 
 	function mapList:Paint(w, h)
-		surface.SetDrawColor(20, 20, 20, 150)
+		surface.SetDrawColor(PHEndDark)
 		surface.DrawRect(0, 0, w, h)
 	end
 
 	local canvas = mapList:GetCanvas()
-	canvas:DockPadding(20, 0, 20, 0)
+	canvas:DockPadding(ScreenScaleH(8), 0, ScreenScaleH(8), 0)
 
 	function canvas:OnChildAdded(child)
 		child:Dock(TOP)
-		child:DockMargin(0, 15, 0, 0)
+		child:DockMargin(0, ScreenScaleH(8), 0, 0)
 	end
 
 	-- Text showing time until map vote ends
@@ -191,13 +185,13 @@ local function createEndRoundMenu()
 	mapVoteTimeLeft:SetTall(draw.GetFontHeight("RobotoHUD-15"))
 
 	function mapVoteTimeLeft:Paint(w, h)
-		surface.SetDrawColor(20, 20, 20, 150)
+		surface.SetDrawColor(PHEndDark)
 		surface.DrawRect(0, 0, w, h)
 
 		if GAMEMODE:GetGameState() == ROUND_MAPVOTE then
-			local voteTime = GAMEMODE.MapVoteTime || 30
+			local voteTime = GAMEMODE.MapVoteTime or 30
 			local time = math.max(0, voteTime - GAMEMODE:GetMapVoteRunningTime())
-			draw.SimpleText("Voting ends in " .. math.ceil(time), "RobotoHUD-15", w - 4, 0, Color(150, 150, 150), 2)
+			draw.SimpleText("Voting ends in " .. math.ceil(time), "RobotoHUD-15", w - ScreenScaleH(2), 0, PHLessWhite, TEXT_ALIGN_RIGHT)
 		end
 	end
 end
@@ -205,7 +199,6 @@ end
 function GM:EndRoundMenuResults(res)
 	self:OpenEndRoundMenu()
 
-	menu.changeTitle("Round Results")
 	menu.setResultsPanelVisibility(true)
 	menu.setVotemapPanelVisibility(false)
 	menu.Results = res
@@ -216,7 +209,6 @@ end
 function GM:EndRoundMapVote()
 	self:OpenEndRoundMenu()
 
-	menu.changeTitle("Map Vote")
 	menu.setResultsPanelVisibility(false)
 	menu.setVotemapPanelVisibility(true)
 	menu.MapVoteList:Clear()
@@ -224,7 +216,7 @@ function GM:EndRoundMapVote()
 	for k, map in pairs(self.MapList) do
 		local but = vgui.Create("DButton")
 		but:SetText("")
-		but:SetTall(128)
+		but:SetTall(math.Clamp(ScreenScaleH(32), 32, 64))
 
 		local png
 		local path = "maps/" .. map .. ".png"
@@ -246,52 +238,48 @@ function GM:EndRoundMapVote()
 		dname = dname:gsub("[_]", " "):gsub("([%a])([%a]+)", function(a, b) return a:upper() .. b end)
 		local z = tonumber(util.CRC(dname):sub(1, 8))
 		local mcol = Color(z % 255, z / 255 % 255, z / 255 / 255 % 255, 50)
-		local gray = Color(150, 150, 150)
+		local gray = PHLessWhite
 
 		but.VotesScroll = 0
 		but.VotesScrollDir = 1
 
 		function but:Paint(w, h)
 			if self.Hovered then
-				surface.SetDrawColor(50, 50, 50, 50)
+				surface.SetDrawColor(PHEndGray)
 				surface.DrawRect(0, 0, w, h)
 			end
 
-			draw.SimpleText(dname, "RobotoHUD-15", 128 + 20, 20, color_white, 0)
+			draw.SimpleText(dname, "RobotoHUD-15", but:GetTall() / 0.8, but:GetTall() / 16, PHWhite, 0)
 			local fg = draw.GetFontHeight("RobotoHUD-15")
-			draw.SimpleText(map, "RobotoHUD-L10", 128 + 20, 20 + fg, gray, 0)
+			draw.SimpleText(map, "RobotoHUD-L10", but:GetTall() / 0.8, (but:GetTall() / 16) + fg, PHLessWhite, 0)
 			if png then
 				surface.SetMaterial(png)
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.DrawTexturedRect(0, 0, 128, 128)
+				surface.SetDrawColor(PHWhite)
+				surface.DrawTexturedRect(0, 0, but:GetTall(), but:GetTall())
 			else
-				surface.SetDrawColor(50, 50, 50, 255)
-				surface.DrawRect(0, 0, 128, 128)
+				surface.SetDrawColor(PHEndDarkest)
+				surface.DrawRect(0, 0, but:GetTall(), but:GetTall())
 				surface.SetDrawColor(mcol)
-				surface.DrawRect(20, 20, 128 - 40, 128 - 40)
+				surface.DrawRect(but:GetTall() / 4, but:GetTall() / 4, but:GetTall() / 2, but:GetTall() / 2)
 			end
 
 			local votes = 0
 			if GAMEMODE.MapVotesByMap[map] then
 				votes = #GAMEMODE.MapVotesByMap[map]
 			end
-
+			
 			local fg2 = draw.GetFontHeight("RobotoHUD-L10")
-			if votes > 0 then
-				draw.SimpleText(votes .. (votes > 1 && " votes" || " vote"), "RobotoHUD-L10", 128 + 20, 20 + fg + 20 + fg2, color_white, 0)
-			end
-
 			local i = 0
 			for ply, map2 in pairs(GAMEMODE.MapVotes) do
-				if IsValid(ply) && map2 == map then
-					draw.SimpleText(ply:Nick(), "RobotoHUD-L10", w, i * fg2 - self.VotesScroll, gray, 2)
+				if IsValid(ply) and map2 == map then
+					draw.SimpleText(ply:Nick(), "RobotoHUD-L10", w, i * fg2 - self.VotesScroll, PHLessWhite, 2)
 					i = i + 1
 				end
 			end
 
-			if i * fg2 > 128 then
+			if i * fg2 > but:GetTall() then
 				self.VotesScroll = self.VotesScroll + FrameTime() * 14 * self.VotesScrollDir
-				if self.VotesScroll > i * fg2 - 128 then
+				if self.VotesScroll > i * fg2 - but:GetTall() then
 					self.VotesScrollDir = -1
 				elseif self.VotesScroll < 0 then
 					self.VotesScrollDir = 1
@@ -308,7 +296,7 @@ function GM:EndRoundMapVote()
 end
 
 function GM:OpenEndRoundMenu()
-	if !IsValid(menu) then
+	if not IsValid(menu) then
 		createEndRoundMenu()
 	end
 
@@ -322,7 +310,7 @@ function GM:CloseEndRoundMenu()
 end
 
 function GM:ToggleEndRoundMenuVisibility()
-	if IsValid(menu) && menu:IsVisible() then
+	if IsValid(menu) and menu:IsVisible() then
 		GAMEMODE:CloseEndRoundMenu()
 	else
 		GAMEMODE:OpenEndRoundMenu()

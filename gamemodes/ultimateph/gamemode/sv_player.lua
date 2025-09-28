@@ -591,11 +591,11 @@ function GM:PlayerDeath(ply, inflictor, attacker)
 end
 
 function GM:KeyPress(ply, key)
-	if ply:Alive() then
-		if key == IN_ATTACK then
-			self:PlayerDisguise(ply)
-		end
+	if not ply:Alive() or key ~= IN_ATTACK then
+		return
 	end
+
+	self:PlayerDisguise(ply)
 end
 
 function GM:PlayerSwitchFlashlight(ply)
@@ -604,10 +604,6 @@ function GM:PlayerSwitchFlashlight(ply)
 	end
 
 	return true
-end
-
-function GM:PlayerShouldTaunt(ply, actid)
-	return false
 end
 
 function GM:PlayerCanSeePlayersChat(text, teamOnly, listener, speaker)
@@ -624,6 +620,14 @@ function GM:StartCommand(ply, cmd)
 	end
 end
 
+function GM:PlayerShouldTaunt(ply, actid)
+	if not ActWhitelist[actid] and not ActEnableAll then
+		return false
+	end
+
+	return true
+end
+
 local sv_alltalk = GetConVar("sv_alltalk")
 function GM:PlayerCanHearPlayersVoice(listener, talker)
 	if !IsValid(talker) then return false end
@@ -637,7 +641,7 @@ function GM:PlayerCanHearChatVoice(listener, talker, typ, teamOnly)
 		end
 	end
 
-	if sv_alltalk:GetInt() == 3 then -- sv_alltalk is not a bool. 0 = team only with poximity, 1 = team only without proximity, 2 = everybody with proxitiy, 3 = everybody without proximity
+	if sv_alltalk:GetInt() >= 2 then -- sv_alltalk is not a bool. 0 = team only with poximity, 1 = team only without proximity, 2 = everybody with proxitiy, 3 = everybody without proximity
 		return true
 	end
 

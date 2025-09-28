@@ -1,16 +1,50 @@
-include("cl_hud.lua")
-include("cl_scoreboard.lua")
-include("cl_voicepanels.lua")
-include("cl_helpscreen.lua")
-include("cl_endroundboard.lua")
-include("cl_colors.lua")
-include("cl_utils.lua")
+include("sh_taunt.lua")
+include("sh_init.lua")
+include("sh_config.lua")
 include("sh_rounds.lua")
 include("sh_disguise.lua")
-include("sh_taunt.lua")
 include("sh_bannedmodels.lua")
 include("sh_mapvote.lua")
-include("sh_init.lua")
+include("cl_hud.lua")
+include("cl_scoreboard.lua")
+include("cl_helpscreen.lua")
+include("cl_endroundboard.lua")
+include("cl_taunt.lua")
+include("cl_utils.lua")
+
+surface.CreateFont( "PHIcons", {
+	font = "marlett",
+	size = math.Clamp( ScreenScaleH(12), 12, 16 ), weight = 700, antialias = true, symbol = true,
+})
+
+local function createRoboto(s)
+	surface.CreateFont("RobotoHUD-" .. s , {
+		font = "Roboto-Bold",
+		size = math.Clamp( ScreenScaleH(s), s, (s * 2) ),
+		weight = 700,
+		antialias = true,
+		italic = false
+	})
+
+	surface.CreateFont("RobotoHUD-L" .. s , {
+		font = "Roboto",
+		size = math.Clamp( ScreenScaleH(s), s, (s * 2) ),
+		weight = 500,
+		antialias = true,
+		italic = false
+	})
+end
+
+for i = 5, 50, 5 do
+	createRoboto(i)
+end
+createRoboto(8)
+createRoboto(12)
+
+function draw.ShadowText(text, font, x, y, color, xalign, yalign, shadowColor)
+	draw.SimpleText(text, font, x + ScreenScaleH(1), y + ScreenScaleH(1), shadowColor or color_black, xalign, yalign)
+	return draw.SimpleText(text, font, x, y, color, xalign, yalign)
+end
 
 function GM:InitPostEntity()
 	net.Start("clientIPE")
