@@ -24,14 +24,19 @@ local function addPlayerItem(self, mlist, ply, pteam)
 
 	function but:Paint(w, h)
 		surface.SetDrawColor(color_black)
+		
+		if tobool(GroupTags) and GroupColors[ply:GetUserGroup()] ~= nil then
+			surface.SetDrawColor(GroupColors[ply:GetUserGroup()])
+			self:DrawFilledRect()
+		end
 
 		if IsValid(ply) and ply:IsPlayer() then
 			local s = ScreenScaleH(2)
 			if not ply:Alive() then
 				surface.SetMaterial(skull)
 				surface.SetDrawColor(220, 220, 220, 255)
-				surface.DrawTexturedRect(s, 0, ScreenScaleH(16), ScreenScaleH(16))
-				s = s + ScreenScaleH(16)
+				surface.DrawTexturedRect(s, ScreenScaleH(4), ScreenScaleH(8), ScreenScaleH(8))
+				s = s + ScreenScaleH(8)
 			end
 
 			if ply:IsMuted() then
@@ -39,26 +44,19 @@ local function addPlayerItem(self, mlist, ply, pteam)
 
 				-- draw mute icon
 				surface.SetDrawColor(150, 150, 150, 255)
-				surface.DrawTexturedRect(s, 0, ScreenScaleH(16), ScreenScaleH(16))
-				s = s + ScreenScaleH(16)
+				surface.DrawTexturedRect(s, ScreenScaleH(4), ScreenScaleH(8), ScreenScaleH(8))
+				s = s + ScreenScaleH(8)
 			end
 
 			-- group tags :D
-			if tobool(GroupTags) then
-				if GroupColors[ply:GetUserGroup()] ~= nil then
-					surface.SetDrawColor(GroupColors[ply:GetUserGroup()])
-					self:DrawFilledRect()
-				end
-					
-				if GroupNames[ply:GetUserGroup()] then
-					draw.SimpleText("["..GroupNames[ply:GetUserGroup()].."]", "RobotoHUD-L20", s, 0, PHScobDarkest, 0)
-					s = s + surface.GetTextSize("["..GroupNames[ply:GetUserGroup()].."]") + ScreenScaleH(2)
-					draw.SimpleText(ply:Nick(), "RobotoHUD-L20", s, 0, color_white, 0)
-					draw.SimpleText(ply:Ping(), "RobotoHUD-L20", w - ScreenScaleH(2), 0, PHHudWhite, 2)
-				end
+			if tobool(GroupTags) and GroupNames[ply:GetUserGroup()] then
+				draw.SimpleText("["..GroupNames[ply:GetUserGroup()].."]", "RobotoHUD-L20", s, h / 2, PHScobDarkest, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				s = s + surface.GetTextSize("["..GroupNames[ply:GetUserGroup()].."]") + ScreenScaleH(2)
+				draw.SimpleText(ply:Nick(), "RobotoHUD-L20", s, h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText(ply:Ping(), "RobotoHUD-L20", w - ScreenScaleH(2), h / 2, PHHudWhite, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 			else
-				draw.ShadowText(ply:Nick(), "RobotoHUD-L20", s, 0, PHWHite, 0)
-				draw.ShadowText(ply:Ping(), "RobotoHUD-L20", w - ScreenScaleH(2), 0, PHWhite, 2)
+				draw.ShadowText(ply:Nick(), "RobotoHUD-L20", s, h / 2, PHWHite, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.ShadowText(ply:Ping(), "RobotoHUD-L20", w - ScreenScaleH(2), h / 2, PHWhite, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 			end
 		end
 	end
