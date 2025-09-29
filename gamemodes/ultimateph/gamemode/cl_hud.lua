@@ -55,32 +55,32 @@ function GM:DrawGameHUD()
 
 	if not disguise or not rotationLock or not tauntMenu then
 		draw.ShadowText("UNBOUND!", "RobotoHUD-15", ScreenScale(4), ScrH() / 2, PHRed, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
-		draw.ShadowText(" Please ensure +attack, +menu_context, and gm_showspare1 are bound!", "RobotoHUD-L15", ScreenScale(4) + surface.GetTextSize("UNBOUND!"), ScrH() / 2, PHWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
-		draw.ShadowText("* MOUSE1, C, and F3 by default.", "RobotoHUD-L12", ScreenScale(4), ScrH() / 2 + fontSize, PHLessWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
+		draw.ShadowText(" Please ensure +attack, +menu_context, and gm_showspare1 are bound!", "RobotoHUD-L15", ScreenScale(4) + surface.GetTextSize("UNBOUND!"), ScrH() / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
+		draw.ShadowText("* MOUSE1, C, and F3 by default.", "RobotoHUD-L12", ScreenScale(4), ScrH() / 2 + fontSize, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
 		return
 	end
 	
 	local totalWidth = math.max(surface.GetTextSize(disguise), surface.GetTextSize(rotationLock), surface.GetTextSize(tauntMenu))
 	
-	draw.ShadowText(disguise, "RobotoHUD-15", ScreenScale(4) + totalWidth / 2, ScrH() / 2 - fontSize, PHWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_LEFT)
-	draw.ShadowText(" Disguise", "RobotoHUD-L15", ScreenScale(4) + totalWidth, ScrH() / 2 - fontSize, PHWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
+	draw.ShadowText(disguise, "RobotoHUD-15", ScreenScale(4) + totalWidth / 2, ScrH() / 2 - fontSize, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_LEFT)
+	draw.ShadowText(" Disguise", "RobotoHUD-L15", ScreenScale(4) + totalWidth, ScrH() / 2 - fontSize, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
 	
-	draw.ShadowText(rotationLock, "RobotoHUD-15", ScreenScale(4) + totalWidth / 2, ScrH() / 2, PHWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_LEFT)
-	draw.ShadowText(" Lock Rotation", "RobotoHUD-L15", ScreenScale(4) + totalWidth, ScrH() / 2, PHWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
+	draw.ShadowText(rotationLock, "RobotoHUD-15", ScreenScale(4) + totalWidth / 2, ScrH() / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_LEFT)
+	draw.ShadowText(" Lock Rotation", "RobotoHUD-L15", ScreenScale(4) + totalWidth, ScrH() / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
 	
-	draw.ShadowText(tauntMenu, "RobotoHUD-15", ScreenScale(4) + totalWidth / 2, ScrH() / 2 + fontSize, PHWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_LEFT)
-	draw.ShadowText(" Taunt Menu", "RobotoHUD-L15", ScreenScale(4) + totalWidth, ScrH() / 2 + fontSize, PHWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
+	draw.ShadowText(tauntMenu, "RobotoHUD-15", ScreenScale(4) + totalWidth / 2, ScrH() / 2 + fontSize, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_LEFT)
+	draw.ShadowText(" Taunt Menu", "RobotoHUD-L15", ScreenScale(4) + totalWidth, ScrH() / 2 + fontSize, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
 end
 
 function GM:DrawRoundTimer()
 	if self:GetGameState() == ROUND_WAIT then
 		local time = math.ceil(self.StartWaitTime:GetFloat() - self:GetStateRunningTime())
 		if time > 0 then
-			draw.ShadowText("Waiting for players to join", "RobotoHUD-25", ScrW() / 2, ScreenScaleH(4), PHWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.ShadowText("Game starts in " .. tostring(time) .. " second" .. (time > 1 and "s" or ""), "RobotoHUD-15", ScrW() / 2, ScreenScaleH(4) + draw.GetFontHeight("RobotoHUD-25"), PHWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.ShadowText("Waiting for players to join", "RobotoHUD-25", ScrW() / 2, ScreenScaleH(4), color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.ShadowText("Game starts in " .. tostring(time) .. " second" .. (time > 1 and "s" or ""), "RobotoHUD-15", ScrW() / 2, ScreenScaleH(4) + draw.GetFontHeight("RobotoHUD-25"), color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		else
-			draw.ShadowText("Not enough players to start", "RobotoHUD-25", ScrW() / 2, ScreenScaleH(4), PHWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.ShadowText("Waiting for more players to join", "RobotoHUD-15", ScrW() / 2, ScreenScaleH(4) + draw.GetFontHeight("RobotoHUD-25"), PHWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.ShadowText("Not enough players to start", "RobotoHUD-25", ScrW() / 2, ScreenScaleH(4), color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.ShadowText("Waiting for more players to join", "RobotoHUD-15", ScrW() / 2, ScreenScaleH(4) + draw.GetFontHeight("RobotoHUD-25"), color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		end
 		return
 	end
@@ -88,8 +88,8 @@ function GM:DrawRoundTimer()
 	if self:GetGameState() == ROUND_HIDE then
 		local time = math.ceil(self.HidingTime:GetInt() - self:GetStateRunningTime())
 		if time > 0 then
-			draw.ShadowText("Hunters will be released in", "RobotoHUD-25", ScrW() / 2, ScreenScaleH(4), PHWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-			draw.ShadowText(time, "RobotoHUD-50", ScrW() / 2, ScreenScaleH(4) + draw.GetFontHeight("RobotoHUD-25"), PHWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.ShadowText("Hunters will be released in", "RobotoHUD-25", ScrW() / 2, ScreenScaleH(4), color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+			draw.ShadowText(time, "RobotoHUD-50", ScrW() / 2, ScreenScaleH(4) + draw.GetFontHeight("RobotoHUD-25"), color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		end
 		return
 	end
@@ -99,15 +99,15 @@ function GM:DrawRoundTimer()
 	end
 
 	if self:GetStateRunningTime() < 2 then
-		draw.ShadowText("GO!", "RobotoHUD-50", ScrW() / 2, ScreenScaleH(4), PHWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.ShadowText("GO!", "RobotoHUD-50", ScrW() / 2, ScreenScaleH(4), color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		return
 	end
 
 	local settings = self:GetRoundSettings()
 	local roundTime = settings.RoundTime or 5 * 60
 	local time = tostring(math.max(0, roundTime - self:GetStateRunningTime()))
-	draw.ShadowText("Round "..GAMEMODE.CurrentRound.."/"..GAMEMODE.RoundLimit:GetInt(), "RobotoHUD-L15", ScrW() / 2, ScreenScaleH(4), PHWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-	draw.ShadowText(string.ToMinutesSeconds(time), "RobotoHUD-20", ScrW() / 2, ScreenScaleH(4) + draw.GetFontHeight("RobotoHUD-L15"), PHWhite, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	draw.ShadowText("Round "..GAMEMODE.CurrentRound.."/"..GAMEMODE.RoundLimit:GetInt(), "RobotoHUD-L15", ScrW() / 2, ScreenScaleH(4), color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	draw.ShadowText(string.ToMinutesSeconds(time), "RobotoHUD-20", ScrW() / 2, ScreenScaleH(4) + draw.GetFontHeight("RobotoHUD-L15"), color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 end
 
 function GM:PreDrawHUD()
@@ -160,7 +160,7 @@ function PANEL:Paint(w, h)
 	surface.SetDrawColor(0, 0, 0, 255)
 	surface.DrawOutlinedRect(0, 0, w * volume, h)
 
-	draw.ShadowText(self.ply:Nick(), "RobotoHUD-12", self.Avatar:GetWide() + ScreenScale(4), h / 2, PHWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	draw.ShadowText(self.ply:Nick(), "RobotoHUD-12", self.Avatar:GetWide() + ScreenScale(4), h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 end
 
 function PANEL:Think()
@@ -344,7 +344,7 @@ local ray_color = PHGreen
 local ray_width = 6
 
 local dotMat = Material("ultimateph/aim_dot")
-local dot_color = PHWhite
+local dot_color = color_white
 
 local hunters_aim = {}
 

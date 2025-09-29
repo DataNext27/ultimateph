@@ -179,7 +179,7 @@ local function openTauntMenu()
 		local t = "Taunts"
 		local tw = surface.GetTextSize(t)
 		draw.ShadowText(t, "RobotoHUD-25", ScreenScaleH(4), draw.GetFontHeight("RobotoHUD-25"), PHBlue, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-		draw.ShadowText("- ".. TauntMenuPhrase, "RobotoHUD-L15", ScreenScaleH(8) + tw, draw.GetFontHeight("RobotoHUD-L15"), PHLessWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.ShadowText("- ".. GetConVar("ph_taunt_menu_phrase"):GetString(), "RobotoHUD-L15", ScreenScaleH(8) + tw, draw.GetFontHeight("RobotoHUD-L15"), PHLessWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	local leftpnl = vgui.Create("DPanel", menu)

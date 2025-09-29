@@ -33,8 +33,8 @@ function PlayerMeta:IsProp() return self:Team() == TEAM_PROP end
 GM.GameState = GAMEMODE && GAMEMODE.GameState || ROUND_WAIT
 
 team.SetUp(TEAM_SPEC, "Spectators", PHWhite, false) -- Setting Joinable to false allows us to use team.BestAutoJoinTeam and have it only include the Hunters/Props teams.
-team.SetUp(TEAM_HUNTER, "Hunters", PHOrange)
-team.SetUp(TEAM_PROP, "Props", PHBlue)
+team.SetUp(TEAM_HUNTER, "Hunters", PHBlue)
+team.SetUp(TEAM_PROP, "Props", PHRed)
 
 function GM:GetGameState()
 	return self.GameState
@@ -124,7 +124,7 @@ GM.PropUndisguisedThirdperson = CreateConVar("ph_props_undisguised_thirdperson",
 GM.AutoTeamBalance = CreateConVar("ph_auto_team_balance", 1, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Automatically balance teams")
 GM.NumberHunter = CreateConVar("ph_nb_hunter", 2, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Set the maximum number of hunters, only works if auto team balance is disable")
 
-GM.TauntMenuPhrase = CreateConVar("ph_taunt_menu_phrase", TauntMenuPhrase, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Phrase shown at the top of the taunt menu")
+GM.TauntMenuPhrase = CreateConVar("ph_taunt_menu_phrase", "make annoying fart sounds", bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Phrase shown at the top of the taunt menu")
 GM.AutoTauntEnabled = CreateConVar("ph_auto_taunt", 0, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "1 if auto taunts should be enabled")
 GM.AutoTauntMin = CreateConVar("ph_auto_taunt_delay_min", 60, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Mininum time to go without taunting")
 GM.AutoTauntMax = CreateConVar("ph_auto_taunt_delay_max", 120, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Maximum time to go without taunting")

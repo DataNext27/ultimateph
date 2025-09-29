@@ -213,3 +213,216 @@
 }
 
 
+"ultimateph"
+{
+	"base"		"base"
+	"title"		"Prop Hunters - Ultimate Edition"
+	"maps"		"^ph_"
+	"menusystem"	"1"
+	"workshopid"	"3028430983"
+	"version" 	"v1.3.1"
+	"settings"
+	{
+		1
+		{
+			"name"		"ph_auto_team_balance"
+			"text"		"Auto balance teams"
+			"help"		"Automatically balance teams"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		2
+		{
+			"name"		"ph_nb_hunter"
+			"text"		"Number of hunters"
+			"help"		"Set the number of hunters, works only if auto balance is disable"
+			"type"		"Numeric"
+			"default"	"2"
+		}
+		3
+		{
+			"name"		"ph_roundlimit"
+			"text"		"Number of rounds"
+			"help"		"Set the number of rounds before mapvote"
+			"type"		"Numeric"
+			"default"	"10"
+		}
+		4
+		{
+			"name"		"ph_roundtime"
+			"text"		"Rounds time limit"
+			"help"		"Time limit before ending the round (0 for automatic time)"
+			"type"		"Numeric"
+			"default"	"0"
+		}
+		5
+		{
+			"name"		"ph_hidingtime"
+			"text"		"Hiding phase time"
+			"help"		"Time before hunters are released"
+			"type"		"Numeric"
+			"default"	"30"
+		}
+		6
+		{
+			"name"		"ph_postroundtime"
+			"text"		"Post-round time"
+			"help"		"Time before next round after end of the round"
+			"type"		"Numeric"
+			"default"	"15"
+
+		}
+		7
+		{
+			"name"		"ph_hunter_dmgpenalty"
+			"text"		"Damage taken by hunters"
+			"help"		"Amount of damage a hunter should take for shooting an incorrect prop"
+			"type"		"Numeric"
+			"default"	"3"
+		}
+		8
+		{
+			"name"		"ph_hunter_smggrenades"
+			"text"		"Number of SMG grenades"
+			"help"		"Amount of SMG grenades hunters should spawn with"
+			"type"		"Numeric"
+			"default"	"1"
+		}
+		9
+		{
+			"name"		"ph_dead_canroam"
+			"text"		"Use roam spectate mode"
+			"help"		"Can dead players use the roam spectate mode"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		10
+		{
+			"name"		"ph_props_onwinstayprops"
+			"text"		"Props stay props on win"
+			"help"		"If the props win, they stay on the props team"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		11
+		{
+			"name"		"ph_auto_taunt"
+			"text"		"Auto taunts enabled"
+			"help"		"Sets if auto taunts are enabled."
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		12
+		{
+			"name"		"ph_auto_taunt_delay_min"
+			"text"		"Min time without taunting"
+			"help"		"Mininum time to go without taunting (sec)."
+			"type"		"Numeric"
+			"default"	"60"
+		}
+		13
+		{
+			"name"		"ph_auto_taunt_delay_max"
+			"text"		"Max time without taunting"
+			"help"		"Maximum time to go without taunting (sec)."
+			"type"		"Numeric"
+			"default"	"120"
+		}
+		14
+		{
+			"name"		"ph_hunter_deaf_onhiding"
+			"text"		"Deaf hunter on hinding"
+			"help"		"Deaf hunters while hiding duration (black screen)"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		15
+		{
+			"name"		"ph_props_silent_footsteps"
+			"text"		"Props silent footsteps"
+			"help"		"Does props emit footsteps sounds while moving"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		16
+		{
+			"name"		"ph_props_tpose"
+			"text"		"Props Tpose"
+			"help"		"Should props be in T pose"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		17
+		{
+			"name"		"ph_props_undisguised_thirdperson"
+			"text"		"Props Undisguised Thirdperson"
+			"help"		"Should props be in thirdperson when undisguised"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		18
+		{
+			"name"		"ph_walk_speed"
+			"text"		"Walk Speed"
+			"help"		"Default Walk Speed for hunters and props."
+			"type"		"Numeric"
+			"default"	"200"
+		}
+		19
+		{
+			"name"		"ph_run_speed"
+			"text"		"Run Speed"
+			"help"		"Default Run Speed for hunters and props."
+			"type"		"Numeric"
+			"default"	"150"
+		}
+		20
+		{
+			"name"		"ph_jump_power"
+			"text"		"Jump Power"
+			"help"		"Default Jump Power for hunters and props."
+			"type"		"Numeric"
+			"default"	"200"
+		}
+		21
+		{
+			"name"		"ph_falldmg_mult"
+			"text"		"Fall Damage multiplier"
+			"help"		"Default Fall Damage multiplier for hunters and props."
+			"type"		"Numeric"
+			"default"	"50"
+		}
+		22
+		{
+			"name"		"ph_falldmg_nonlethal"
+			"text"		"Non-Lethal Fall Damage"
+			"help"		"If set, fall damage will not take players below one health."
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		23
+		{
+			"name"		"ph_props_camdistance_mult"
+			"text"		"Prop Camera Distance Multiplier"
+			"help"		"The camera distance multiplier for props when disguised"
+			"type"		"Numeric"
+			"default"	"1"
+		}
+		24
+		{
+			"name"		"ph_props_camdistance_min"
+			"text"		"Props Minimum Camera Distance"
+			"help"		"The minimum camera distance for props when disguised"
+			"type"		"Numeric"
+			"default"	"60"
+		}
+		25
+		{
+			"name"		"ph_props_camdistance_max"
+			"text"		"Props Maximum Camera Distance"
+			"help"		"The maximum camera distance for props when disguised"
+			"type"		"Numeric"
+			"default"	"160"
+		}
+	}
+}

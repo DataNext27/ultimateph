@@ -51,10 +51,10 @@ local function addPlayerItem(self, mlist, ply, pteam)
 				end
 					
 				if GroupNames[ply:GetUserGroup()] then
-					draw.ShadowText("["..GroupNames[ply:GetUserGroup()].."]", "RobotoHUD-L20", s, 0, PHScobDarkest, 0)
+					draw.SimpleText("["..GroupNames[ply:GetUserGroup()].."]", "RobotoHUD-L20", s, 0, PHScobDarkest, 0)
 					s = s + surface.GetTextSize("["..GroupNames[ply:GetUserGroup()].."]") + ScreenScaleH(2)
-					draw.ShadowText(ply:Nick(), "RobotoHUD-L20", s, 0, PHWhite, 0)
-					draw.ShadowText(ply:Ping(), "RobotoHUD-L20", w - ScreenScaleH(2), 0, PHWhite, 2)
+					draw.SimpleText(ply:Nick(), "RobotoHUD-L20", s, 0, color_white, 0)
+					draw.SimpleText(ply:Ping(), "RobotoHUD-L20", w - ScreenScaleH(2), 0, PHHudWhite, 2)
 				end
 			else
 				draw.ShadowText(ply:Nick(), "RobotoHUD-L20", s, 0, PHWHite, 0)
@@ -248,7 +248,7 @@ local function createScoreboardPanel()
 	local tw = surface.GetTextSize("Spectate")
 
 	function bottom:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, PHScobDarker)
+		draw.RoundedBox(ScreenScaleH(CornerRadius), 0, 0, w, h, PHScobDarker)
 		local c
 		for k, ply in pairs(team.GetPlayers(TEAM_SPEC)) do
 			if c then
@@ -272,9 +272,9 @@ local function createScoreboardPanel()
 	function but:Paint(w, h)
 		local colt = table.Copy(PHLessWhite)
 		if self:IsDown() then
-			colMul(col, 0.8)
+			colMul(colt, 0.8)
 		elseif self:IsHovered() then
-			colMul(col, 1.2)
+			colMul(colt, 1.2)
 		end
 
 		draw.RoundedBox(ScreenScaleH(CornerRadius), 0, 0, w, h, PHScobDarker)

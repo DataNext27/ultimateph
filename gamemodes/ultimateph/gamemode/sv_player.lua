@@ -20,10 +20,6 @@ function GM:PlayerInitialSpawn(ply)
 	end
 end
 
-function GM:PlayerLoadedLocalPlayer(ply)
-	self:SetTauntMenuPhrase(self.TauntMenuPhrase:GetString(), ply)
-end
-
 net.Receive("clientIPE", function(len, ply)
 	if !ply.ClientIPE then
 		ply.ClientIPE = true

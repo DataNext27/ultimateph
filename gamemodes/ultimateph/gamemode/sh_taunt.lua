@@ -1,7 +1,6 @@
 Taunts = {}
 TauntCategories = {}
 AllowedTauntSounds = {}
-TauntMenuPhrase = "make annoying fart sounds"
 
 function FilenameToSoundname(filename)
 	local sndName = string.Trim(filename)
@@ -319,3 +318,4 @@ if SERVER then
 		(GM || GAMEMODE):StartAutoTauntTimer()
 	end)
 end
+
