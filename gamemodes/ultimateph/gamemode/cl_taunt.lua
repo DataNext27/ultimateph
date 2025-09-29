@@ -28,7 +28,7 @@ local function fillList(mlist, taunts, cat)
 
 	mlist:Clear()
 	for k, t in pairs(taunts) do
-		if not TauntAllowedForPlayer(LocalPlayer(), t) then 
+		if !TauntAllowedForPlayer(LocalPlayer(), t) then 
 			continue 
 		end
 
@@ -100,7 +100,7 @@ local function fillCats(clist, mlist)
 	for k, taunts in pairs(TauntCategories) do
 		local c = 0
 		for a, t in pairs(taunts) do
-			if not TauntAllowedForPlayer(LocalPlayer(), t) then continue end
+			if !TauntAllowedForPlayer(LocalPlayer(), t) then continue end
 
 			c = c + 1
 		end
