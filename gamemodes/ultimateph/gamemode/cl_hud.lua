@@ -128,9 +128,9 @@ local PlayerVoicePanels = {}
 function PANEL:Init()
 	self.Avatar = vgui.Create("AvatarImage", self)
 	self.Avatar:Dock(LEFT)
-	self.Avatar:SetSize(math.Clamp(ScreenScaleH(16), 16, 32), math.Clamp(ScreenScaleH(16), 16, 32))
+	self.Avatar:SetSize(ScreenScaleH(16), ScreenScaleH(16))
 	self.Color = color_transparent
-	self:SetSize(math.Clamp(ScreenScaleH(16), 16, 32), math.Clamp(ScreenScaleH(16), 16, 32))
+	self:SetSize(ScreenScaleH(16), ScreenScaleH(16))
 	self:DockPadding(ScreenScaleH(2), ScreenScaleH(2), ScreenScaleH(2), ScreenScaleH(2))
 	self:DockMargin(ScreenScaleH(2), ScreenScaleH(2), ScreenScaleH(2), ScreenScaleH(2))
 	self:Dock(BOTTOM)
