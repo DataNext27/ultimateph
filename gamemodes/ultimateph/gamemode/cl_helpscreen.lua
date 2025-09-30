@@ -35,7 +35,7 @@ local function createHelpMenu()
 		surface.SetDrawColor(40, 40, 40, 230)
 		surface.DrawRect(0, 0, w, h)
 		surface.SetFont("RobotoHUD-25")
-		draw.ShadowText("Help", "RobotoHUD-25", 8, 2, Color(132, 199, 29), 0)
+		draw.SimpleText("Help", "RobotoHUD-25", 8, 2, Color(132, 199, 29), 0)
 	end
 
 	local text = vgui.Create("DLabel", menu)

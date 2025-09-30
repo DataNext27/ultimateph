@@ -1,6 +1,6 @@
 scoreboard = scoreboard or {}
 
-function scoreboard:show()
+function scoreboard:show() -- setup the main parent from which all elements will dock
 	local menu = vgui.Create("DFrame")
 	PHScoreboard = menu
 	menu:SetSize(ScreenScale(512), ScreenScaleH(384))
@@ -23,10 +23,14 @@ function scoreboard:show()
 		surface.DrawRect(math.Clamp(ScreenScaleH(2), 2, 4), math.Clamp(ScreenScaleH(2), 2, 4), w - math.Clamp(ScreenScaleH(4), 4, 8), h - math.Clamp(ScreenScaleH(4), 4, 8))
 	end
 
-	Header(menu, TOP)
+	-- all the scoreboard elements have been broken out into individual functions for the sake of reducing duplicate code and improving modularity. they are called here
+	if tobool(ScobBackground) then
+		Header(menu, TOP)
+	end
+	
 	SpectatorList(menu, TEAM_SPEC, BOTTOM)
-	HunterList = TeamList(menu, TEAM_HUNTER, LEFT)
-	PropList = TeamList(menu, TEAM_PROP, RIGHT)
+	PlayerList(menu, TEAM_HUNTER, LEFT)
+	PlayerList(menu, TEAM_PROP, RIGHT)
 
 	function scoreboard:hide()
 		menu:Close()
@@ -39,17 +43,13 @@ function Header(parent, dock)
 	Header:DockMargin(0, 0, 0, ScreenScaleH(2))
 
 	function Header:Paint(w, h)
-		if not tobool(ScobBackground) then
-			return
-		end
-		
-		surface.SetFont("RobotoHUD-25")
-		self:SetTall(draw.GetFontHeight("RobotoHUD-25"))
-		draw.ShadowText(GAMEMODE.Name or "", "RobotoHUD-25", ScreenScaleH(2), draw.GetFontHeight("RobotoHUD-25"), PHRed, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		surface.SetFont("RobotoHUD-18")
+		self:SetTall(draw.GetFontHeight("RobotoHUD-18"))
+		draw.SimpleText(GAMEMODE.Name or "", "RobotoHUD-18", ScreenScaleH(2), draw.GetFontHeight("RobotoHUD-18"), PHRed, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 	end
 end
 
-function TeamList(parent, pteam, dock)
+function PlayerList(parent, pteam, dock)
 	local PlayerListBG = vgui.Create("DPanel", parent)
 	PlayerListBG:Dock(dock)
 	PlayerListBG:DockMargin(0, 0, 0, ScreenScale(4))
@@ -59,45 +59,75 @@ function TeamList(parent, pteam, dock)
 		surface.SetDrawColor(0, 0, 0, 0)
 	end
 
-	TeamHeader(PlayerListBG, pteam, TOP, "Join Team")
+	TeamHeader(PlayerListBG, pteam, TOP, "Join Team") -- call the header early so it docks properly
 
 	local PlayerList = vgui.Create("DListView", PlayerListBG)
-	PlayerList:Dock(dock)
+	PlayerList:Dock(FILL)
 	PlayerList:SetSize(PlayerListBG:GetWide(), PlayerListBG:GetTall())
-	PlayerList:SetDataHeight(draw.GetFontHeight("RobotoHUD-L20"))
-	PlayerList:SetHeaderHeight(draw.GetFontHeight("RobotoHUD-L20"))
-	PlayerList:AddColumn("NAME", 1)
-	PlayerList:AddColumn("KILLS", 2)
-	PlayerList:AddColumn("DEATHS", 3)
-	PlayerList:AddColumn("PING", 4)
+	PlayerList:SetDataHeight(ScreenScaleH(16))
+	PlayerList:SetHeaderHeight(draw.GetFontHeight("RobotoHUD-L18"))
+	surface.SetFont("RobotoHUD-L18")
+	PlayerList:AddColumn("", 1):SetFixedWidth(ScreenScaleH(16))
+	PlayerList:AddColumn("", 2):SetFixedWidth(PlayerList:GetWide() - (ScreenScaleH(16) + surface.GetTextSize("KILLS") + surface.GetTextSize("DEATHS") + surface.GetTextSize("PING")))
+	PlayerList:AddColumn("KILLS", 3):SetFixedWidth(surface.GetTextSize("KILLS"))
+	PlayerList:AddColumn("DEATHS", 4):SetFixedWidth(surface.GetTextSize("DEATHS"))
+	PlayerList:AddColumn("PING", 5):SetFixedWidth(surface.GetTextSize("PING"))
 	
 	function PlayerList:Paint(w, h)
 		surface.SetDrawColor(PHScobDarkest)
 		draw.RoundedBoxEx(0, 0, 0, w, h, PHScobDark, true, true, false, false)
 	end
 	
-	for _, ply in ipairs( team.GetPlayers(pteam) ) do			
-		local line = PlayerList:AddLine(ply:Name(), (ply:Frags() + ply:Deaths()), ply:Deaths(), ply:Ping())			
+	for _, ply in ipairs( team.GetPlayers(pteam) ) do
+		local line = PlayerList:AddLine(nil, ply:Nick(), ply:Frags(), ply:Deaths(), ply:Ping()) -- leave column 1 empty to override with player's avatar later
+		
 		function line:Paint( w, h )
 			if tobool(GroupTags) and GroupColors[ply:GetUserGroup()] ~= nil then
 				surface.SetDrawColor(GroupColors[ply:GetUserGroup()])
 				self:DrawFilledRect()
 			end
-				
-			for _, cln in pairs( self.Columns ) do
-				cln:SetFont("RobotoHUD-L20")
-				cln:SetTextColor(PHWhite)
-				cln:SetContentAlignment(5)
+		end
+
+		for id, cln in ipairs( line.Columns ) do
+			cln:SetFont("RobotoHUD-L18")
+			cln:SetTextColor(PHWhite)
+
+			if id == 1 then -- override the content of column1 with avatar, group, mute and death icons
+				local Avatar = vgui.Create( "AvatarImage", cln )
+				Avatar:SetPos( 0, 0 )
+				Avatar:SetPlayer( ply, 64 )
+				Avatar:Dock(FILL)
+				ply.Avatar = Avatar
+
+				if tobool(GroupTags) and GroupIcons[ply:GetUserGroup()] ~= nil then
+					local mat = vgui.Create("Material", ply.Avatar)
+					mat:SetPos(0, 0)
+					mat:SetFGColor(PHWhite)
+					mat:SetMaterial(GroupIcons[ply:GetUserGroup()])
+				end
 			end
+
+			if id == 2 then -- adjust text alignment for player names (align left center)
+				cln:SetContentAlignment(4)
+				continue
+			end
+
+			cln:SetContentAlignment(5) -- set the rest to align center center
 		end
 	end
 		
-	for _, v in ipairs(PlayerList.Columns) do
+	for id, v in ipairs(PlayerList.Columns) do
 		function v.Header:Paint(w, h)
-			self:SetFont("RobotoHUD-L20")
+			self:SetFont("RobotoHUD-L14")
 			self:SetTextColor(PHLessWhite)
-			v:SetTextAlign(5)
 		end
+
+		if id <= 2 then
+			v:SetTextAlign(4)
+			continue
+		end
+
+		v:SetTextAlign(5)
 	end
 end
 
@@ -109,7 +139,7 @@ function TeamHeader(parent, pteam, dock, text)
 	function TeamHeader:Paint(w, h)
 		surface.SetDrawColor(PHScobDarker)
 		draw.RoundedBoxEx(ScreenScaleH(CornerRadius), 0, 0, w, h, PHScobDarker, true, true, false, false)
-		draw.ShadowText(team.GetName(pteam), "RobotoHUD-25", ScreenScaleH(2), h / 2, team.GetColor(pteam), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(team.GetName(pteam), "RobotoHUD-18", ScreenScaleH(2), h / 2, team.GetColor(pteam), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 	JoinTeam(TeamHeader, pteam, RIGHT, text)
 end
@@ -120,20 +150,20 @@ function SpectatorList(parent, pteam, dock)
 	SpectatorListBG:SetSize(parent:GetWide(), parent:GetTall() / 24)
 
 	function SpectatorListBG:Paint(w, h)
-		surface.SetFont("RobotoHUD-20")
-		draw.RoundedBox(ScreenScaleH(CornerRadius), 0, 0, w, h, PHScobDarker)
+		surface.SetFont("RobotoHUD-18")
+		draw.RoundedBox(ScreenScaleH(CornerRadius), 0, 0, w, h, PHScobDark)
 	end
 
 	JoinTeam(SpectatorListBG, TEAM_SPEC, LEFT, "Spectate")
 	
 	local SpectatorList = vgui.Create("DHorizontalScroller", SpectatorListBG)
-	SpectatorList:SetTall(draw.GetFontHeight("RobotoHUD-20"))
+	SpectatorList:SetTall(draw.GetFontHeight("RobotoHUD-18"))
 	SpectatorList:Dock(dock)
 
 	for _, ply in ipairs(team.GetPlayers(TEAM_SPEC)) do
 		local line = vgui.Create("DLabel", SpectatorList)
 		line:SetColor(PHLessWhite)
-		line:SetFont("RobotoHUD-L10")
+		line:SetFont("RobotoHUD-L14")
 		line:SetText(ply:Nick())
 		line:SetWide(line:GetTextSize() + ScreenScaleH(6))
 		SpectatorList:AddPanel(line)
@@ -144,7 +174,7 @@ function JoinTeam(parent, pteam, dock, text)
 	local JoinTeam = vgui.Create("DButton", parent)
 	JoinTeam:Dock(dock)
 	JoinTeam:SetText("")
-	surface.SetFont("RobotoHUD-20")
+	surface.SetFont("RobotoHUD-18")
 	JoinTeam:SetWide(surface.GetTextSize(text) + ScreenScaleH(6))
 
 	function JoinTeam:Paint(w, h)
@@ -155,7 +185,7 @@ function JoinTeam(parent, pteam, dock, text)
 			colMul(col, 1.2)
 		end
 			
-		draw.ShadowText(text, "RobotoHUD-20", w - ScreenScaleH(2), h / 2, col, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(text, "RobotoHUD-18", w - ScreenScaleH(2), h / 2, col, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	end
 
 	function JoinTeam:DoClick()

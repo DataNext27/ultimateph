@@ -26,15 +26,19 @@ PHBlue = Color(50, 150, 255) -- props
 -- misc.
 CornerRadius = "4" -- set to 0 to disable rounded corners. number is in pixels relative to 480p.
 ScobBackground = true -- set to false to disable scoreboard background & credits
-GroupTags = false -- set to true to enable group tags. requires ULX
+GroupTags = true -- set to true to enable group tags. requires ULX
 ActEnableAll = false -- set to true to enable all default gmod animations
 NameDistance = 500 -- adjusts how close you need to be to see a player's name
 
 GroupColors = {}
-GroupColors["example"] = PHExample
+GroupColors["superadmin"] = PHRed
+GroupColors["user"] = PHBlue
 
 GroupNames = {}
-GroupNames["example"] = "Example"
+GroupNames["superadmin"] = "Super Admin"
+
+GroupIcons = {}
+--GroupIcons["superadmin"] = "icon16/award_star_gold_1.png"
 
 -- it is ideal to delete undesired options rather than setting to false. see https://wiki.facepunch.com/gmod/Enums/ACT
 ActWhitelist = {}

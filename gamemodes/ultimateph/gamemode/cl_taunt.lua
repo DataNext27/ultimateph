@@ -43,8 +43,8 @@ local function fillList(mlist, taunts, cat)
 			elseif self:IsHovered() then
 				colMul(col, 0.8)
 			end
-			draw.ShadowText(t.name, "RobotoHUD-L15", 0, h / 2, col, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			draw.ShadowText(math.Round(t.soundDuration % 60, 2) .. "s", "RobotoHUD-L10", w - ScreenScaleH(2), h / 2, col, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(t.name, "RobotoHUD-L15", 0, h / 2, col, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(math.Round(t.soundDuration % 60, 2) .. "s", "RobotoHUD-L10", w - ScreenScaleH(2), h / 2, col, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		end
 
 		function but:DoClick()
@@ -82,7 +82,7 @@ local function addCat(clist, name, taunts, mlist)
 		end
 
 		draw.RoundedBoxEx(ScreenScaleH(CornerRadius), 0, 0, w, h, col, true, false, true, false)
-		draw.ShadowText(dname, "RobotoHUD-15", w / 2, h / 2, colt, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(dname, "RobotoHUD-15", w / 2, h / 2, colt, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	function but:DoClick()
@@ -178,8 +178,8 @@ local function openTauntMenu()
 		surface.SetFont("RobotoHUD-25")
 		local t = "Taunts"
 		local tw = surface.GetTextSize(t)
-		draw.ShadowText(t, "RobotoHUD-25", ScreenScaleH(4), draw.GetFontHeight("RobotoHUD-25"), PHBlue, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-		draw.ShadowText("- ".. GetConVar("ph_taunt_menu_phrase"):GetString(), "RobotoHUD-L15", ScreenScaleH(8) + tw, draw.GetFontHeight("RobotoHUD-L15"), PHLessWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(t, "RobotoHUD-25", ScreenScaleH(4), draw.GetFontHeight("RobotoHUD-25"), PHBlue, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		draw.SimpleText("- ".. GetConVar("ph_taunt_menu_phrase"):GetString(), "RobotoHUD-L15", ScreenScaleH(8) + tw, draw.GetFontHeight("RobotoHUD-L15"), PHLessWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	local leftpnl = vgui.Create("DPanel", menu)
@@ -205,7 +205,7 @@ local function openTauntMenu()
 		end
 
 		draw.RoundedBoxEx(ScreenScaleH(CornerRadius), 0, 0, w, h, col, true, true, true, true)
-		draw.ShadowText("Random", "RobotoHUD-15", w / 2, h / 2, colt, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText("Random", "RobotoHUD-15", w / 2, h / 2, colt, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	function but:DoClick()

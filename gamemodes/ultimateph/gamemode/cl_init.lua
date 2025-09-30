@@ -27,7 +27,7 @@ local function createRoboto(s)
 	})
 
 	surface.CreateFont("RobotoHUD-L" .. s , {
-		font = "Roboto",
+		font = "Roboto-Regular",
 		size = math.Clamp( ScreenScaleH(s), s, (s * 2) ),
 		weight = 500,
 		antialias = true,
@@ -40,11 +40,10 @@ for i = 5, 50, 5 do
 end
 createRoboto(8)
 createRoboto(12)
-
-function draw.ShadowText(text, font, x, y, color, xalign, yalign, shadowColor)
-	draw.SimpleText(text, font, x + ScreenScaleH(1), y + ScreenScaleH(1), shadowColor or color_black, xalign, yalign)
-	return draw.SimpleText(text, font, x, y, color, xalign, yalign)
-end
+createRoboto(14)
+createRoboto(16)
+createRoboto(18)
+createRoboto(24)
 
 function GM:InitPostEntity()
 	net.Start("clientIPE")
