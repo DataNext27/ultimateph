@@ -1,3 +1,5 @@
+util.AddNetworkString("TeamChanged")
+
 concommand.Add("ph_jointeam", function(ply, com, args)
 	local newTeam = tonumber(args[1]) || TEAM_SPEC -- Default to spectators if there's a problem
 	if ply:Team() == newTeam then return end
@@ -220,3 +222,9 @@ function GM:ChooseSpectatee(ply)
 		self:SpectateNext(ply)
 	end
 end
+
+hook.Add("PlayerChangedTeam", "TeamChanged", function(ply)
+		net.Start("TeamChanged")
+		net.WriteEntity(ply)
+		net.Broadcast()
+end)
