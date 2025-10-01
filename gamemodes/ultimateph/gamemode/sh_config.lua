@@ -38,7 +38,7 @@ GroupNames = {}
 GroupNames["superadmin"] = "Super Admin"
 
 GroupIcons = {}
---GroupIcons["superadmin"] = "icon16/award_star_gold_1.png"
+GroupIcons["superadmin"] = "icon16/award_star_gold_1.png"
 
 -- it is ideal to delete undesired options rather than setting to false. see https://wiki.facepunch.com/gmod/Enums/ACT
 ActWhitelist = {}

@@ -1,5 +1,3 @@
-util.AddNetworkString("TeamChanged")
-
 concommand.Add("ph_jointeam", function(ply, com, args)
 	local newTeam = tonumber(args[1]) || TEAM_SPEC -- Default to spectators if there's a problem
 	if ply:Team() == newTeam then return end
@@ -11,6 +9,10 @@ concommand.Add("ph_jointeam", function(ply, com, args)
 		if ply:Alive() then ply:Kill() end
 		ply:SetTeam(newTeam)
 		GlobalChatMsg(ply:Nick(), " changed team to ", team.GetColor(newTeam), team.GetName(newTeam))
+		-- inform the client, currently only for scob updates
+		net.Start("TeamChanged")
+		net.WriteEntity(ply)
+		net.Broadcast()
 	else
 		ply:PlayerChatMsg("Team full, you cannot join")
 	end
@@ -89,8 +91,6 @@ function GM:SwapTeams()
 end
 
 -- former sv_spectate.lua
-util.AddNetworkString("spectating_status")
-
 local PlayerMeta = FindMetaTable("Player")
 
 function PlayerMeta:CSpectate(mode, spectatee)
@@ -222,9 +222,3 @@ function GM:ChooseSpectatee(ply)
 		self:SpectateNext(ply)
 	end
 end
-
-hook.Add("PlayerChangedTeam", "TeamChanged", function(ply)
-		net.Start("TeamChanged")
-		net.WriteEntity(ply)
-		net.Broadcast()
-end)

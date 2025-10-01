@@ -31,8 +31,6 @@ function GM:PlayerDisconnected(ply)
 	ply:SetTeam(TEAM_HUNTER)
 end
 
-util.AddNetworkString("hull_set")
-
 function GM:PlayerSpawn(ply)
 	ply:UnCSpectate()
 
@@ -584,6 +582,11 @@ function GM:PlayerDeath(ply, inflictor, attacker)
 
 	-- time until player can spectate another player
 	ply.SpectateTime = CurTime() + 2
+
+	-- inform the client (currently only for scob updating)
+	net.Start("PlayerDeath")
+	net.WriteEntity(ply)
+	net.Broadcast()
 end
 
 function GM:KeyPress(ply, key)

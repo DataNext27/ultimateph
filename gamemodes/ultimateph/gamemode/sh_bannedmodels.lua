@@ -2,10 +2,6 @@ if SERVER then
 -- former sv_bannedmodels.lua	
 	GM.BannedModels = {} -- This is used as a hash table where the key is the model string and the value is true.
 	
-	util.AddNetworkString("ph_bannedmodels_getall")
-	util.AddNetworkString("ph_bannedmodels_add")
-	util.AddNetworkString("ph_bannedmodels_remove")
-	
 	function GM:IsModelBanned(model)
 		return self.BannedModels[model] == true
 	end

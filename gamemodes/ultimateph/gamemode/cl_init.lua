@@ -12,10 +12,16 @@ include("cl_endroundboard.lua")
 include("cl_taunt.lua")
 include("cl_utils.lua")
 
-surface.CreateFont( "PHIcons", {
-	font = "marlett",
-	size = math.Clamp( ScreenScaleH(12), 12, 16 ), weight = 700, antialias = true, symbol = true,
-})
+local function createIcons(s)
+	surface.CreateFont( "PHIcons-" .. s, {
+		font = "marlett",
+		size = math.Clamp( ScreenScaleH(s), s, s * 4 ), 
+		weight = 700, 
+		antialias = true,
+		italic = false,
+		symbol = true,
+	})
+end
 
 local function createRoboto(s)
 	surface.CreateFont("RobotoHUD-" .. s , {
@@ -38,6 +44,12 @@ end
 for i = 5, 50, 5 do
 	createRoboto(i)
 end
+-- todo: this better
+createIcons(12)
+createIcons(16)
+createIcons(24)
+createIcons(32)
+createIcons(64)
 createRoboto(8)
 createRoboto(12)
 createRoboto(14)

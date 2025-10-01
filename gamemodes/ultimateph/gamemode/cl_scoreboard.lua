@@ -95,15 +95,27 @@ function PlayerList(parent, pteam, dock)
 			if id == 1 then -- override the content of column1 with avatar, group, mute and death icons
 				local Avatar = vgui.Create( "AvatarImage", cln )
 				Avatar:SetPos( 0, 0 )
+				Avatar:SetSize(ScreenScaleH(16), ScreenScaleH(16))
 				Avatar:SetPlayer( ply, 64 )
 				Avatar:Dock(FILL)
-				ply.Avatar = Avatar
+				ply.PHAvatar = Avatar
+
+				if not ply:Alive() then
+					local DeadMat = vgui.Create("DLabel", ply.PHAvatar)
+					DeadMat:Dock(FILL)
+					DeadMat:SetTextColor(PHRed)
+					DeadMat:SetFont("PHIcons-16")
+					DeadMat:SetText("r")
+					DeadMat:SetContentAlignment(5)
+				end
 
 				if tobool(GroupTags) and GroupIcons[ply:GetUserGroup()] ~= nil then
-					local mat = vgui.Create("Material", ply.Avatar)
-					mat:SetPos(0, 0)
-					mat:SetFGColor(PHWhite)
-					mat:SetMaterial(GroupIcons[ply:GetUserGroup()])
+					local GroupMat = vgui.Create("Material", ply.PHAvatar)
+					GroupMat:SetPos(0, 0)
+					GroupMat:SetSize(ply.PHAvatar:GetWide() / 3, ply.PHAvatar:GetTall() / 3)
+					GroupMat:SetFGColor(PHWhite)
+					GroupMat:SetMaterial(GroupIcons[ply:GetUserGroup()])
+					GroupMat.AutoSize = false
 				end
 			end
 
@@ -141,6 +153,7 @@ function TeamHeader(parent, pteam, dock, text)
 		draw.RoundedBoxEx(ScreenScaleH(CornerRadius), 0, 0, w, h, PHScobDarker, true, true, false, false)
 		draw.SimpleText(team.GetName(pteam), "RobotoHUD-18", ScreenScaleH(2), h / 2, team.GetColor(pteam), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
+	
 	JoinTeam(TeamHeader, pteam, RIGHT, text)
 end
 
@@ -197,6 +210,7 @@ function GM:ScoreboardShow()
 	if IsValid(PHScoreboard) then
 		scoreboard:hide()
 	end
+	
 	scoreboard:show()
 end
 
@@ -207,11 +221,19 @@ function GM:ScoreboardHide()
 end
 
 -- hack to update player list w/o constantly running through loops. todo: add a proper refresh function
-net.Receive("TeamChanged", function(ply)
+function scoreboard:refresh()
 	timer.Simple(0.1, function() 
 		if IsValid(PHScoreboard) then
 			RunConsoleCommand("-showscores")
 			timer.Simple(0, function() RunConsoleCommand("+showscores") end)
 		end
 	end)
+end
+
+net.Receive("TeamChanged", function(ply)
+	scoreboard:refresh()
+end)
+
+net.Receive("PlayerDeath", function(ply)
+	scoreboard:refresh()
 end)

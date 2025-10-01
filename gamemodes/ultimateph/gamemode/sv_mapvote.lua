@@ -1,8 +1,4 @@
 -- mapvote
-
-util.AddNetworkString("ph_mapvote")
-util.AddNetworkString("ph_mapvotevotes")
-
 GM.MapVoteTime = GAMEMODE && GAMEMODE.MapVoteTime || 30
 GM.MapVoteStart = GAMEMODE && GAMEMODE.MapVoteStart || CurTime()
 

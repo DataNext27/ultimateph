@@ -1,5 +1,4 @@
 -- former sv_chatmsg.lua
-util.AddNetworkString("ph_chatmsg")
 local PlayerMeta = FindMetaTable("Player")
 
 -- Sends a message to an individual player.
@@ -252,8 +251,6 @@ function EntityMeta:GetRagdollOwner()
 end
 
 -- former sv_killfeed.lua
-util.AddNetworkString("ph_kill_feed_add")
-
 local DMG_CLUB_GENERIC = bit.bor(DMG_CLUB, DMG_GENERIC)
 local DMG_SLOWBURN_BURN = bit.bor(DMG_SLOWBURN, DMG_BURN)
 local DMG_BLAST_SURFACE_BLAST = bit.bor(DMG_BLAST_SURFACE, DMG_BLAST)

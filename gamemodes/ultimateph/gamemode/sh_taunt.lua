@@ -165,9 +165,7 @@ end
 GM:LoadTaunts()
 
 if SERVER then
--- former sv_taunt.lua
-	util.AddNetworkString("open_taunt_menu")
-	
+-- former sv_taunt.lua	
 	local PlayerMeta = FindMetaTable("Player")
 	
 	function PlayerMeta:CanTaunt()
@@ -250,22 +248,6 @@ if SERVER then
 	
 	concommand.Add("ph_taunt_random", function(ply, com, args, full)
 		DoRandomTaunt(ply)
-	end)
-	
-	util.AddNetworkString("ph_set_taunt_menu_phrase")
-	function GM:SetTauntMenuPhrase(phrase, ply)
-		net.Start("ph_set_taunt_menu_phrase")
-		net.WriteString(phrase)
-	
-		if ply then
-			net.Send(ply)
-		else
-			net.Broadcast()
-		end
-	end
-	
-	cvars.AddChangeCallback("ph_taunt_menu_phrase", function(convar_name, value_old, value_new)
-		(GM || GAMEMODE):SetTauntMenuPhrase(value_new)
 	end)
 	
 	function GM:AutoTauntCheck()

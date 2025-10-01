@@ -55,4 +55,4 @@ local function toggleHelpMenu()
 	menu:SetVisible(!menu:IsVisible())
 end
 
-net.Receive("ph_openhelpmenu", toggleHelpMenu)
+concommand.Add("ph_openhelpmenu", toggleHelpMenu)

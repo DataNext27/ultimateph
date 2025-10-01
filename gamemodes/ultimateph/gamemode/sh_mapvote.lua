@@ -1,9 +1,5 @@
 if SERVER then
--- former sv_mapvote.lua
-	
-	util.AddNetworkString("ph_mapvote")
-	util.AddNetworkString("ph_mapvotevotes")
-	
+-- former sv_mapvote.lua	
 	GM.MapVoteTime = GAMEMODE && GAMEMODE.MapVoteTime || 30
 	GM.MapVoteStart = GAMEMODE && GAMEMODE.MapVoteStart || CurTime()
 	

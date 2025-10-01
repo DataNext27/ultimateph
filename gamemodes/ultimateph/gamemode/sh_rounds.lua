@@ -1,11 +1,4 @@
-if SERVER then
--- former sv_rounds.lua
-	include("sv_awards.lua")
-	
-	util.AddNetworkString("gamestate")
-	util.AddNetworkString("round_victor")
-	util.AddNetworkString("gamerules")
-	
+if SERVER then	
 	GM.GameState = GAMEMODE && GAMEMODE.GameState || ROUND_WAIT
 	GM.StateStart = GAMEMODE && GAMEMODE.StateStart || CurTime()
 	GM.Rounds = GAMEMODE && GAMEMODE.Rounds || 0

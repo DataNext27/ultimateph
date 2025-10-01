@@ -11,12 +11,27 @@ for k, v in pairs(files) do
 end
 
 util.AddNetworkString("clientIPE")
-util.AddNetworkString("ph_openhelpmenu")
 util.AddNetworkString("player_model_sex")
+util.AddNetworkString("hull_set")
+util.AddNetworkString("ph_chatmsg")
+util.AddNetworkString("ph_kill_feed_add")
+util.AddNetworkString("gamestate")
+util.AddNetworkString("round_victor")
+util.AddNetworkString("gamerules")
+util.AddNetworkString("ph_mapvote")
+util.AddNetworkString("ph_mapvotevotes")
+util.AddNetworkString("spectating_status")
+util.AddNetworkString("TeamChanged")
+util.AddNetworkString("PlayerDeath")
+-- banned models
+util.AddNetworkString("ph_bannedmodels_getall")
+util.AddNetworkString("ph_bannedmodels_add")
+util.AddNetworkString("ph_bannedmodels_remove")
 
 include("sv_player.lua")
 include("sv_teams.lua")
 include("sv_utils.lua")
+include("sv_awards.lua")
 include("sh_init.lua")
 include("sh_rounds.lua")
 include("sh_disguise.lua")
@@ -109,11 +124,10 @@ function GM:CleanupMap()
 end
 
 function GM:ShowHelp(ply)
-	net.Start("ph_openhelpmenu")
-	net.Send(ply)
+	ply:ConCommand("ph_openhelpmenu")
 end
 
 function GM:ShowSpare1(ply)
-	net.Start("open_taunt_menu")
-	net.Send(ply)
+	ply:ConCommand("ph_menu_taunt")
 end
+
