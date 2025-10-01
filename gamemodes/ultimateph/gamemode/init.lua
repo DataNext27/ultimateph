@@ -10,19 +10,25 @@ for k, v in pairs(files) do
 	end
 end
 
+-- what?
 util.AddNetworkString("clientIPE")
-util.AddNetworkString("player_model_sex")
-util.AddNetworkString("hull_set")
+-- ui
 util.AddNetworkString("ph_chatmsg")
 util.AddNetworkString("ph_kill_feed_add")
+util.AddNetworkString("TeamChanged")
+util.AddNetworkString("PlayerDeath")
+util.AddNetworkString("PlayerSpawn")
+-- player meta
+util.AddNetworkString("player_model_sex")
+util.AddNetworkString("hull_set")
+-- rounds
 util.AddNetworkString("gamestate")
 util.AddNetworkString("round_victor")
 util.AddNetworkString("gamerules")
+util.AddNetworkString("spectating_status")
+-- mapvote
 util.AddNetworkString("ph_mapvote")
 util.AddNetworkString("ph_mapvotevotes")
-util.AddNetworkString("spectating_status")
-util.AddNetworkString("TeamChanged")
-util.AddNetworkString("PlayerDeath")
 -- banned models
 util.AddNetworkString("ph_bannedmodels_getall")
 util.AddNetworkString("ph_bannedmodels_add")

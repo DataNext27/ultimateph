@@ -54,6 +54,11 @@ function GM:PlayerSpawn(ply)
 	ply:SetPlayerColor(vec)
 
 	ply.LastSpawnTime = CurTime()
+
+	-- inform the client (currently only for scob updating)
+	net.Start("PlayerSpawn")
+	net.WriteEntity(ply)
+	net.Broadcast()
 end
 
 function GM:PlayerSetupHands(ply)

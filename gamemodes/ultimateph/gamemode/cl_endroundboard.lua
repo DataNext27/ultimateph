@@ -14,7 +14,7 @@ local function createEndRoundMenu()
 	menu:DockPadding(math.Clamp(ScreenScaleH(2), 2, 4), ScreenScaleH(12) + math.Clamp(ScreenScaleH(2), 2, 4), math.Clamp(ScreenScaleH(2), 2, 4), math.Clamp(ScreenScaleH(2), 2, 4))
 
 	local closeButton = vgui.Create('DButton', menu)
-	closeButton:SetFont('PHIcons')
+	closeButton:SetFont('PHIcons-8')
 	closeButton:SetText('r')
 	closeButton.Paint = function(s,w,h)
 		if not closeButton:IsHovered() then
@@ -133,7 +133,7 @@ local function createEndRoundMenu()
 
 	function resultsTimeLeft:Paint(w, h)
 		-- "Extend" the dark rectangle from awards:Paint to make a larger seamless rectangle
-		surface.SetDrawColor(PHEndDark)
+		surface.SetDrawColor(PHEndDarker)
 		surface.DrawRect(0, 0, w, h)
 
 		if GAMEMODE:GetGameState() == ROUND_POST then

@@ -138,7 +138,7 @@ local function openTauntMenu()
 	menu:DockPadding(ScreenScaleH(4), ScreenScaleH(4) + draw.GetFontHeight("RobotoHUD-25"), ScreenScaleH(4), ScreenScaleH(4))
 
 	local closeButton = vgui.Create('DButton', menu)
-	closeButton:SetFont('PHIcons')
+	closeButton:SetFont('PHIcons-8')
 	closeButton:SetText('r')
 	closeButton.Paint = function(s,w,h)
 		if not closeButton:IsHovered() then

@@ -62,11 +62,11 @@ function PlayerList(parent, pteam, dock)
 	TeamHeader(PlayerListBG, pteam, TOP, "Join Team") -- call the header early so it docks properly
 
 	local PlayerList = vgui.Create("DListView", PlayerListBG)
-	PlayerList:Dock(FILL)
+	surface.SetFont("RobotoHUD-L18")
 	PlayerList:SetSize(PlayerListBG:GetWide(), PlayerListBG:GetTall())
 	PlayerList:SetDataHeight(ScreenScaleH(16))
 	PlayerList:SetHeaderHeight(draw.GetFontHeight("RobotoHUD-L18"))
-	surface.SetFont("RobotoHUD-L18")
+	PlayerList:Dock(FILL)
 	PlayerList:AddColumn("", 1):SetFixedWidth(ScreenScaleH(16))
 	PlayerList:AddColumn("", 2):SetFixedWidth(PlayerList:GetWide() - (ScreenScaleH(16) + surface.GetTextSize("KILLS") + surface.GetTextSize("DEATHS") + surface.GetTextSize("PING")))
 	PlayerList:AddColumn("KILLS", 3):SetFixedWidth(surface.GetTextSize("KILLS"))
@@ -81,6 +81,29 @@ function PlayerList(parent, pteam, dock)
 	for _, ply in ipairs( team.GetPlayers(pteam) ) do
 		local line = PlayerList:AddLine(nil, ply:Nick(), ply:Frags(), ply:Deaths(), ply:Ping()) -- leave column 1 empty to override with player's avatar later
 		
+		function PlayerList:OnRowSelected()
+			local PlayerActions = DermaMenu()
+
+			if ply ~= LocalPlayer() then
+				PlayerActions:AddOption("Mute", function()
+					if not ply:IsValid() then
+						return
+					end
+				
+					ply:SetMuted(!ply:IsMuted()) 
+					scoreboard:refresh()
+				end)
+			end
+
+			if LocalPlayer():IsAdmin() then
+				PlayerActions:AddOption("Team Switch", function()
+					LocalPlayer():ConCommand("ulx teamswitch ".. ply:Nick())
+				end)
+			end
+			
+			PlayerActions:Open()
+		end
+		
 		function line:Paint( w, h )
 			if tobool(GroupTags) and GroupColors[ply:GetUserGroup()] ~= nil then
 				surface.SetDrawColor(GroupColors[ply:GetUserGroup()])
@@ -94,28 +117,27 @@ function PlayerList(parent, pteam, dock)
 
 			if id == 1 then -- override the content of column1 with avatar, group, mute and death icons
 				local Avatar = vgui.Create( "AvatarImage", cln )
-				Avatar:SetPos( 0, 0 )
-				Avatar:SetSize(ScreenScaleH(16), ScreenScaleH(16))
 				Avatar:SetPlayer( ply, 64 )
+				Avatar:SetSize(ScreenScaleH(16), ScreenScaleH(16))
+				Avatar:SetPos( 0, 0 )
 				Avatar:Dock(FILL)
 				ply.PHAvatar = Avatar
 
 				if not ply:Alive() then
 					local DeadMat = vgui.Create("DLabel", ply.PHAvatar)
 					DeadMat:Dock(FILL)
-					DeadMat:SetTextColor(PHRed)
+					DeadMat:SetTextColor(Color(PHRed.r, PHRed.g, PHRed.b, 220))
 					DeadMat:SetFont("PHIcons-16")
 					DeadMat:SetText("r")
 					DeadMat:SetContentAlignment(5)
 				end
 
 				if tobool(GroupTags) and GroupIcons[ply:GetUserGroup()] ~= nil then
-					local GroupMat = vgui.Create("Material", ply.PHAvatar)
-					GroupMat:SetPos(0, 0)
-					GroupMat:SetSize(ply.PHAvatar:GetWide() / 3, ply.PHAvatar:GetTall() / 3)
-					GroupMat:SetFGColor(PHWhite)
-					GroupMat:SetMaterial(GroupIcons[ply:GetUserGroup()])
-					GroupMat.AutoSize = false
+					PlayerIcons(ply.PHAvatar, ply.PHAvatar:GetWide() / 3, ply.PHAvatar:GetTall() / 3, 0, 0, GroupIcons[ply:GetUserGroup()])
+				end
+
+				if ply:IsMuted() then
+					PlayerIcons(ply.PHAvatar, ply.PHAvatar:GetWide() / 3, ply.PHAvatar:GetTall() / 3, ply.PHAvatar:GetWide() - ply.PHAvatar:GetWide() / 3, ply.PHAvatar:GetTall() - ply.PHAvatar:GetTall() / 3, "icon16/sound_mute.png")
 				end
 			end
 
@@ -141,6 +163,14 @@ function PlayerList(parent, pteam, dock)
 
 		v:SetTextAlign(5)
 	end
+end
+
+function PlayerIcons(parent, sizex, sizez, posx, posz, material)
+	local PlayerIcons = vgui.Create("Material", parent)
+	PlayerIcons:SetSize(sizex, sizez)
+	PlayerIcons:SetPos(posx, posz)
+	PlayerIcons:SetMaterial(material)
+	PlayerIcons.AutoSize = false
 end
 
 function TeamHeader(parent, pteam, dock, text)
@@ -235,5 +265,9 @@ net.Receive("TeamChanged", function(ply)
 end)
 
 net.Receive("PlayerDeath", function(ply)
+	scoreboard:refresh()
+end)
+
+net.Receive("PlayerSpawn", function(ply)
 	scoreboard:refresh()
 end)

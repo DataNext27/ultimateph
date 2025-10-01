@@ -45,6 +45,7 @@ for i = 5, 50, 5 do
 	createRoboto(i)
 end
 -- todo: this better
+createIcons(8)
 createIcons(12)
 createIcons(16)
 createIcons(24)

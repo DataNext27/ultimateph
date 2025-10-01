@@ -206,3 +206,18 @@ commandToUlx("ph_endround", function(c)
     c:help("Ends the round on a tie.")
 end)
 
+-- force team switch for admins. modified from ULX CustomCommands
+function ulx.ph_teamswitch(calling_ply, target_plys)
+	for _, v in pairs(target_plys) do
+		if v:Team() == TEAM_HUNTER then
+			v:ConCommand("ph_jointeam 3")
+		else
+			v:ConCommand("ph_jointeam 2")
+		end
+	end
+	ulx.fancyLogAdmin(calling_ply, "#A forced #T to switch teams", target_plys)
+end
+local ph_teamswitch = ulx.command("UltimatePH", "ulx ph_teamswitch", ulx.ph_teamswitch, {"!ph_teamswitch", "!ph_teamswitch"})
+ph_teamswitch:addParam{type = ULib.cmds.PlayersArg}
+ph_teamswitch:defaultAccess(ULib.ACCESS_ADMIN)
+ph_teamswitch:help("Force a player to switch teams.")
