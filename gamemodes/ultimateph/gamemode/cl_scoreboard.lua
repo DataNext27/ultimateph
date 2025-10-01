@@ -72,6 +72,32 @@ function PlayerList(parent, pteam, dock)
 	PlayerList:AddColumn("KILLS", 3):SetFixedWidth(surface.GetTextSize("KILLS"))
 	PlayerList:AddColumn("DEATHS", 4):SetFixedWidth(surface.GetTextSize("DEATHS"))
 	PlayerList:AddColumn("PING", 5):SetFixedWidth(surface.GetTextSize("PING"))
+
+	PlayerList.OnRowSelected = function(panel, rowIndex, row)
+		local PlayerActions = DermaMenu()
+		local ply = row:GetValue(1)
+
+		if ply ~= LocalPlayer() then
+			PlayerActions:AddOption("Mute", function()
+				if not ply:IsValid() then
+					return
+				end
+			
+				ply:SetMuted(!ply:IsMuted()) 
+				scoreboard:refresh()
+			end)
+		end
+
+		if LocalPlayer():IsAdmin() then
+			for cmd, cmdname in pairs(ULXCommands) do
+				PlayerActions:AddOption(cmdname, function()
+					LocalPlayer():ConCommand(cmd.." "..ply:Nick())
+				end)
+			end
+		end
+		
+		PlayerActions:Open()
+	end
 	
 	function PlayerList:Paint(w, h)
 		surface.SetDrawColor(PHScobDarkest)
@@ -79,30 +105,7 @@ function PlayerList(parent, pteam, dock)
 	end
 	
 	for _, ply in ipairs( team.GetPlayers(pteam) ) do
-		local line = PlayerList:AddLine(nil, ply:Nick(), ply:Frags(), ply:Deaths(), ply:Ping()) -- leave column 1 empty to override with player's avatar later
-		
-		function PlayerList:OnRowSelected()
-			local PlayerActions = DermaMenu()
-
-			if ply ~= LocalPlayer() then
-				PlayerActions:AddOption("Mute", function()
-					if not ply:IsValid() then
-						return
-					end
-				
-					ply:SetMuted(!ply:IsMuted()) 
-					scoreboard:refresh()
-				end)
-			end
-
-			if LocalPlayer():IsAdmin() then
-				PlayerActions:AddOption("Team Switch", function()
-					LocalPlayer():ConCommand("ulx teamswitch ".. ply:Nick())
-				end)
-			end
-			
-			PlayerActions:Open()
-		end
+		local line = PlayerList:AddLine(ply, ply:Nick(), ply:Frags(), ply:Deaths(), ply:Ping()) -- an avatar is drawn over column 1, so use it to store playerdata. this makes the drop down menu much simpler
 		
 		function line:Paint( w, h )
 			if tobool(GroupTags) and GroupColors[ply:GetUserGroup()] ~= nil then
@@ -247,6 +250,7 @@ end
 function GM:ScoreboardHide()
 	if IsValid(PHScoreboard) then
 		scoreboard:hide()
+		DermaMenu()
 	end
 end
 

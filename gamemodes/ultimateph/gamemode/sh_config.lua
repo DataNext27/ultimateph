@@ -26,7 +26,7 @@ PHBlue = Color(50, 150, 255) -- props
 -- misc.
 CornerRadius = "4" -- set to 0 to disable rounded corners. number is in pixels relative to 480p.
 ScobBackground = true -- set to false to disable scoreboard background & credits
-GroupTags = true -- set to true to enable group tags. requires ULX
+GroupTags = false -- set to true to enable group tags. requires ULX
 ActEnableAll = false -- set to true to enable all default gmod animations
 NameDistance = 500 -- adjusts how close you need to be to see a player's name
 
@@ -39,6 +39,10 @@ GroupNames["superadmin"] = "Super Admin"
 
 GroupIcons = {}
 GroupIcons["superadmin"] = "icon16/award_star_gold_1.png"
+
+-- ulx admin commands to add to the scoreboard click menu. the first bit is the console command, the second is the name to show
+ULXCommands = {}
+ULXCommands["ulx ph_teamswitch"] = "Team Switch"
 
 -- it is ideal to delete undesired options rather than setting to false. see https://wiki.facepunch.com/gmod/Enums/ACT
 ActWhitelist = {}
