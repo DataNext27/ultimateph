@@ -595,11 +595,65 @@ function GM:PlayerDeath(ply, inflictor, attacker)
 end
 
 function GM:KeyPress(ply, key)
-	if not ply:Alive() or key ~= IN_ATTACK then
+	if not ply:Alive() then
 		return
 	end
 
-	self:PlayerDisguise(ply)
+	if key == IN_ATTACK then
+		self:PlayerDisguise(ply)
+		return
+	end
+
+	-- the following has been heavily modified from Push Mod by Mr Ibizza/Renard/Jordie.
+	if key == IN_USE then
+		ply.PHLastPush = ply.PHLastPush or 0
+		local target = ply:GetEyeTrace().Entity
+
+		if ply.PHLastPush + 0.2 > CurTime() then
+			return
+		end
+
+		if (ply and not ply:IsValid()) and (target and not target:IsValid()) then
+			return
+		end
+
+		if not ply:IsPlayer() then
+			return
+		end
+
+		if ply:GetPos():Distance(target:GetPos()) <= 100 then
+			if target:GetClass() == "func_breakable" or target:GetClass() == "func_breakable_surf" then
+				target:Fire("SetHealth", 0)
+				ply:ViewPunch(Angle(math.random(-5, 5), math.random(-5, 5), 0))
+
+			elseif target:IsPlayer() and (target:Alive() or target:GetMoveType() == MOVETYPE_WALK or not target:IsDisguised()) then
+				local velAng = ply:EyeAngles():Forward()
+				target:EmitSound(PHPushSounds[math.random(#PHPushSounds)], 100, 100)
+				target:SetVelocity(velAng * 500)
+				target:ViewPunch(Angle(math.random( -30, 30 ), math.random( -30, 30 ), 0))
+			end
+		end
+		ply.PHLastPush = CurTime()
+	end
+end
+
+function GM:PlayerUse(ply, ent)
+	ply.PHLastUse = ply.PHLastUse or 0
+
+	if IsValid(ent) and PHAntiExploit[ent:GetClass()] and ply.PHLastUse + 0.5 > CurTime() then
+		return false
+	end
+
+	ply.PHLastUse = CurTime()
+	return true
+end
+
+function GM:PlayerShouldTakeDamage(ply, attacker)
+	if IsValid(attacker) and PHDamageBlacklist[attacker:GetClass()] then
+		return false
+	end
+
+	return true
 end
 
 function GM:PlayerSwitchFlashlight(ply)
@@ -625,7 +679,7 @@ function GM:StartCommand(ply, cmd)
 end
 
 function GM:PlayerShouldTaunt(ply, actid)
-	if not ActWhitelist[actid] and not ActEnableAll then
+	if not PHActWhitelist[actid] and not PHActEnableAll then
 		return false
 	end
 

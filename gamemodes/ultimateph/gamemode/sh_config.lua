@@ -23,48 +23,76 @@ PHOrange = Color(255, 150, 50) -- hunters
 PHGreen = Color(50, 170, 46) -- aim lazer
 PHBlue = Color(50, 150, 255) -- props
 
+PHProps = PHBlue
+PHHunters = PHOrange
+PHScobTextCol = PHRed
+
 -- misc.
-CornerRadius = "4" -- set to 0 to disable rounded corners. number is in pixels relative to 480p.
-ScobBackground = true -- set to false to disable scoreboard background & credits
-GroupTags = false -- set to true to enable group tags. requires ULX
-ActEnableAll = false -- set to true to enable all default gmod animations
-NameDistance = 500 -- adjusts how close you need to be to see a player's name
+PHCornerRadius = "0" -- set to 0 to disable rounded corners. number is in pixels relative to 480p.
+PHScobBackground = true -- set to false to disable scoreboard background & credits
+PHGroupTags = true -- set to true to enable group tags. requires ULX
+PHActEnableAll = false -- set to true to enable all default gmod animations
+PHNameDistance = 500 -- adjusts how close you need to be to see a player's name
+PHScobText = GM.Name
 
-GroupColors = {}
-GroupColors["superadmin"] = PHRed
-GroupColors["user"] = PHBlue
+PHGroupColors = {}
+PHGroupColors["superadmin"] = PHRed
+PHGroupColors["user"] = PHBlue
 
-GroupNames = {}
-GroupNames["superadmin"] = "Super Admin"
+PHGroupNames = {}
+PHGroupNames["superadmin"] = "Super Admin"
 
-GroupIcons = {}
-GroupIcons["superadmin"] = "icon16/award_star_gold_1.png"
+PHGroupIcons = {}
+PHGroupIcons["superadmin"] = "icon16/award_star_gold_1.png"
 
 -- ulx admin commands to add to the scoreboard click menu. the first bit is the console command, the second is the name to show
-ULXCommands = {}
-ULXCommands["ulx ph_teamswitch"] = "Team Switch"
+PHULXCommands = {}
+PHULXCommands["ulx ph_teamswitch"] = "Team Switch"
 
 -- it is ideal to delete undesired options rather than setting to false. see https://wiki.facepunch.com/gmod/Enums/ACT
-ActWhitelist = {}
-ActWhitelist[ACT_GMOD_GESTURE_BOW] = true
-ActWhitelist[ACT_GMOD_GESTURE_WAVE] = true
-ActWhitelist[ACT_GMOD_GESTURE_AGREE] = true
-ActWhitelist[ACT_GMOD_GESTURE_BECON] = true
-ActWhitelist[ACT_GMOD_GESTURE_DISAGREE] = true
-ActWhitelist[ACT_GMOD_GESTURE_TAUNT_ZOMBIE] = true
-ActWhitelist[ACT_GMOD_TAUNT_LAUGH] = true
-ActWhitelist[ACT_GMOD_TAUNT_CHEER] = true
-ActWhitelist[ACT_GMOD_TAUNT_DANCE] = true
-ActWhitelist[ACT_GMOD_TAUNT_ROBOT] = true
-ActWhitelist[ACT_GMOD_TAUNT_SALUTE] = true
-ActWhitelist[ACT_GMOD_TAUNT_MUSCLE] = true
-ActWhitelist[ACT_GMOD_TAUNT_PERSISTENCE] = true
-ActWhitelist[ACT_SIGNAL_HALT] = true
-ActWhitelist[ACT_SIGNAL_GROUP] = true
-ActWhitelist[ACT_SIGNAL_FORWARD] = true
+PHActWhitelist = {}
+PHActWhitelist[ACT_GMOD_GESTURE_BOW] = true
+PHActWhitelist[ACT_GMOD_GESTURE_WAVE] = true
+PHActWhitelist[ACT_GMOD_GESTURE_AGREE] = true
+PHActWhitelist[ACT_GMOD_GESTURE_BECON] = true
+PHActWhitelist[ACT_GMOD_GESTURE_DISAGREE] = true
+PHActWhitelist[ACT_GMOD_GESTURE_TAUNT_ZOMBIE] = true
+PHActWhitelist[ACT_GMOD_TAUNT_LAUGH] = true
+PHActWhitelist[ACT_GMOD_TAUNT_CHEER] = true
+PHActWhitelist[ACT_GMOD_TAUNT_DANCE] = true
+PHActWhitelist[ACT_GMOD_TAUNT_ROBOT] = true
+PHActWhitelist[ACT_GMOD_TAUNT_SALUTE] = true
+PHActWhitelist[ACT_GMOD_TAUNT_MUSCLE] = true
+PHActWhitelist[ACT_GMOD_TAUNT_PERSISTENCE] = true
+PHActWhitelist[ACT_SIGNAL_HALT] = true
+PHActWhitelist[ACT_SIGNAL_GROUP] = true
+PHActWhitelist[ACT_SIGNAL_FORWARD] = true
 
 -- set which HUD elements to hide. see https://wiki.facepunch.com/gmod/HUD_Element_List
 -- gamemode-added elements include "PropHuntersPlayerNames", 
-HudBlacklist = {}
-HudBlacklist["CHudVoiceSelfStatus"] = true -- you should probably leave this one alone. disabling the custom voice panel is no currently supported
-HudBlacklist["CHudVoiceStatus"] = true -- same deal here
+PHHudBlacklist = {}
+PHHudBlacklist["CHudVoiceSelfStatus"] = true -- you should probably leave this one alone. disabling the custom voice panel is no currently supported
+PHHudBlacklist["CHudVoiceStatus"] = true -- same deal here
+
+-- prevent players from being hurt by select map entities. see https://developer.valvesoftware.com/wiki/List_of_entities
+PHDamageBlacklist = {}
+PHDamageBlacklist["trigger_hurt"] = true
+PHDamageBlacklist["env_fire"] = true
+PHDamageBlacklist["func_door"] = true
+
+-- some ON_USE entities can be spammed to the point nobody can enter! prevent it here
+PHAntiExploit = {}
+PHAntiExploit["func_door"] = true
+PHAntiExploit["func_door_rotating"] = true
+PHAntiExploit["prop_door_rotating"] = true
+
+-- sounds in this table will be played at random when pushing players
+PHPushSounds = {}
+PHPushSounds[1] = "physics/body/body_medium_impact_hard1.wav"
+PHPushSounds[2] = "physics/body/body_medium_impact_hard2.wav"
+PHPushSounds[3] = "physics/body/body_medium_impact_hard3.wav"
+PHPushSounds[4] = "physics/body/body_medium_impact_hard5.wav"
+PHPushSounds[5] = "physics/body/body_medium_impact_hard6.wav"
+PHPushSounds[6] = "physics/body/body_medium_impact_soft5.wav"
+PHPushSounds[7] = "physics/body/body_medium_impact_soft6.wav"
+PHPushSounds[8] = "physics/body/body_medium_impact_soft7.wav"
