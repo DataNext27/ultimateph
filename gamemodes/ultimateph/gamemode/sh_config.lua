@@ -86,6 +86,11 @@ PHAntiExploit["func_door"] = true
 PHAntiExploit["func_door_rotating"] = true
 PHAntiExploit["prop_door_rotating"] = true
 
+-- it seems like the already existing random sounds didnt actually work? so for now, here. only for disguised props
+PHDeathSounds = {}
+PHDeathSounds[1] = "ambient/voices/f_scream1.wav"
+PHDeathSounds[2] = "ambient/voices/m_scream1.wav"
+
 -- sounds in this table will be played at random when pushing players
 PHPushSounds = {}
 PHPushSounds[1] = "physics/body/body_medium_impact_hard1.wav"

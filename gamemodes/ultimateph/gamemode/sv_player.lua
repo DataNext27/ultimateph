@@ -265,8 +265,178 @@ function GM:PlayerSetModel(ply)
 	net.Send(ply)
 end
 
-function GM:PlayerDeathSound()
+function GM:PlayerDeathSound(ply)
 	return true
+end
+
+function GM:PlayerDeathThink(ply)
+	if self:CanRespawn(ply) then
+		ply:UnCSpectate()
+		ply:Spawn()
+		return
+	end
+
+	self:ChooseSpectatee(ply)
+end
+
+function GM:DoPlayerDeath(ply, attacker, dmginfo)
+	if ply:IsDisguised() and ply:IsProp() then
+		ply:EmitSound(PHDeathSounds[math.random(#PHDeathSounds)], 100, math.random(55, 155))
+	end
+
+	if ply.TauntsUsed then
+		for k, v in pairs(ply.TauntsUsed) do
+			ply:StopSound(k)
+		end
+	end
+
+	ply.TauntsUsed = {}
+	ply.TauntEnd = nil
+	ply.AutoTauntDeadline = nil
+
+	if ply:IsProp() then
+		self.LastPropDeath = ply
+	end
+
+	ply:UnDisguise()
+	ply:Freeze(false) -- why?, *sigh*
+	ply:CreateRagdoll()
+
+	local ent = ply:GetNWEntity("DeathRagdoll")
+	if IsValid(ent) then
+		ply:CSpectate(OBS_MODE_CHASE, ent)
+	end
+
+	ply:AddDeaths(1)
+
+	if IsValid(attacker) and attacker:IsPlayer() and attacker ~= ply then
+		attacker:AddFrags(1)
+
+		if attacker:IsHunter() and ply:IsProp() then
+			attacker.HunterKills = (attacker.HunterKills || 0) + 1
+		end
+
+		if self.FirstHunterKill == nil then
+			self.FirstHunterKill = attacker
+		end
+	end
+
+	self:AddKillFeed(ply, attacker, dmginfo)
+end
+
+function GM:PlayerDeath(ply, inflictor, attacker)
+	ply.NextSpawnTime = CurTime() + 1
+	ply.DeathTime = CurTime()
+
+	-- time until player can spectate another player
+	ply.SpectateTime = CurTime() + 2
+
+	-- inform the client (currently only for scob updating)
+	net.Start("PlayerDeath")
+	net.WriteEntity(ply)
+	net.Broadcast()
+end
+
+function GM:KeyPress(ply, key)
+	if not ply:Alive() then
+		return
+	end
+
+	if key == IN_ATTACK then
+		self:PlayerDisguise(ply)
+		return
+	end
+
+	-- the following has been heavily modified from Push Mod by Mr Ibizza/Renard/Jordie.
+	if key == IN_USE then
+		ply.PHLastPush = ply.PHLastPush or 0
+		local target = ply:GetEyeTrace().Entity
+
+		if ply.PHLastPush + 0.2 > CurTime() then
+			return
+		end
+
+		if (ply and not ply:IsValid()) and (target and not target:IsValid()) then
+			return
+		end
+
+		if not ply:IsPlayer() then
+			return
+		end
+
+		if ply:GetPos():Distance(target:GetPos()) <= 100 then
+			if target:GetClass() == "func_breakable" or target:GetClass() == "func_breakable_surf" then
+				target:Fire("SetHealth", 0)
+				ply:ViewPunch(Angle(math.random(-5, 5), math.random(-5, 5), 0))
+
+			elseif target:IsPlayer() and (target:Alive() or target:GetMoveType() == MOVETYPE_WALK or not target:IsDisguised()) then
+				local velAng = ply:EyeAngles():Forward()
+				target:EmitSound(PHPushSounds[math.random(#PHPushSounds)], 100, 100)
+				target:SetVelocity(velAng * 500)
+				target:ViewPunch(Angle(math.random( -30, 30 ), math.random( -30, 30 ), 0))
+			end
+		end
+		ply.PHLastPush = CurTime()
+	end
+end
+
+function GM:PlayerUse(ply, ent)
+	ply.PHLastUse = ply.PHLastUse or 0
+
+	if IsValid(ent) and PHAntiExploit[ent:GetClass()] and ply.PHLastUse + 0.5 > CurTime() then
+		return false
+	end
+
+	ply.PHLastUse = CurTime()
+	return true
+end
+
+function GM:PlayerShouldTakeDamage(ply, attacker)
+	if IsValid(attacker) and PHDamageBlacklist[attacker:GetClass()] then
+		return false
+	end
+
+	return true
+end
+
+function GM:PlayerSwitchFlashlight(ply)
+	if ply:IsDisguised() then
+		return false
+	end
+
+	return true
+end
+
+function GM:PlayerShouldTaunt(ply, actid)
+	if not PHActWhitelist[actid] and not PHActEnableAll then
+		return false
+	end
+
+	return true
+end
+
+function GM:PlayerCanPickupWeapon(ply, wep)
+	if ply:IsProp() then
+		return false
+	end
+
+	return true
+end
+
+function GM:PlayerCanSeePlayersChat(text, teamOnly, listener, speaker)
+	if (GetConVar("sv_alltalk"):GetInt() < 2 or teamOnly) and listener:Team() ~= speaker:Team() then
+		return false
+	end
+
+	return true
+end
+
+function GM:StartCommand(ply, cmd)
+	if ply:IsBot() then
+		cmd:SetForwardMove(0)
+		cmd:SetSideMove(0)
+		cmd:SetViewAngles(Angle(0, 0, 0))
+	end
 end
 
 -- This is only a shallow copy.
@@ -490,242 +660,3 @@ end
 -----------------------------------
 -----------------------------------
 -----------------------------------
-
-function GM:PlayerDeathThink(ply)
-	if self:CanRespawn(ply) then
-		ply:UnCSpectate()
-		ply:Spawn()
-	else
-		self:ChooseSpectatee(ply)
-	end
-end
-
-local defaultDeathsound = Sound("ambient/voices/f_scream1.wav")
-local deathsoundsFile = file.Read(GM.Folder .. "/ph_deathsounds.txt", "GAME") || ""
-local deathsounds = util.KeyValuesToTable(deathsoundsFile, true, true)
-
-for _, v in pairs(deathsounds) do
-	if type(v) == "string" then
-		resource.AddFile(Sound(v))
-		continue
-	end
-
-	for _, s in ipairs(v) do
-		resource.AddFile(Sound(s))
-	end
-end
-
-local function chooseDeathsound(key)
-	local ds = deathsounds[key]
-	if !ds then return nil end
-	if type(ds) == "string" then return ds end
-	if #ds == 0 then return nil end
-	return table.Random(ds)
-end
-
-local function randomDeathsound(ply)
-	return chooseDeathsound(ply:SteamID()) || chooseDeathsound("default") || defaultDeathsound
-end
-
-function GM:DoPlayerDeath(ply, attacker, dmginfo)
-	if ply:IsDisguised() && ply:IsProp() then
-		ply:EmitSound(randomDeathsound(ply))
-	end
-
-	if ply.TauntsUsed then
-		for k, v in pairs(ply.TauntsUsed) do
-			ply:StopSound(k)
-		end
-	end
-
-	ply.TauntsUsed = {}
-	ply.TauntEnd = nil
-	ply.AutoTauntDeadline = nil
-
-	-- are they a prop
-	if ply:IsProp() then
-		-- set the last death award
-		self.LastPropDeath = ply
-	end
-
-	ply:UnDisguise()
-	ply:Freeze(false) -- why?, *sigh*
-	ply:CreateRagdoll()
-
-	local ent = ply:GetNWEntity("DeathRagdoll")
-	if IsValid(ent) then
-		ply:CSpectate(OBS_MODE_CHASE, ent)
-	end
-
-	ply:AddDeaths(1)
-
-	if IsValid(attacker) && attacker:IsPlayer() then
-		if attacker == ply then
-			attacker:AddFrags(-1)
-		else
-			attacker:AddFrags(1)
-
-			-- did a hunter kill a prop
-			if attacker:IsHunter() && ply:IsProp() then
-				-- increase their round kills
-				attacker.HunterKills = (attacker.HunterKills || 0) + 1
-
-				-- set the first hunter kill award
-				if self.FirstHunterKill == nil then
-					self.FirstHunterKill = attacker
-				end
-			end
-		end
-	end
-
-	self:AddKillFeed(ply, attacker, dmginfo)
-end
-
-function GM:PlayerDeath(ply, inflictor, attacker)
-	ply.NextSpawnTime = CurTime() + 1
-	ply.DeathTime = CurTime()
-
-	-- time until player can spectate another player
-	ply.SpectateTime = CurTime() + 2
-
-	-- inform the client (currently only for scob updating)
-	net.Start("PlayerDeath")
-	net.WriteEntity(ply)
-	net.Broadcast()
-end
-
-function GM:KeyPress(ply, key)
-	if not ply:Alive() then
-		return
-	end
-
-	if key == IN_ATTACK then
-		self:PlayerDisguise(ply)
-		return
-	end
-
-	-- the following has been heavily modified from Push Mod by Mr Ibizza/Renard/Jordie.
-	if key == IN_USE then
-		ply.PHLastPush = ply.PHLastPush or 0
-		local target = ply:GetEyeTrace().Entity
-
-		if ply.PHLastPush + 0.2 > CurTime() then
-			return
-		end
-
-		if (ply and not ply:IsValid()) and (target and not target:IsValid()) then
-			return
-		end
-
-		if not ply:IsPlayer() then
-			return
-		end
-
-		if ply:GetPos():Distance(target:GetPos()) <= 100 then
-			if target:GetClass() == "func_breakable" or target:GetClass() == "func_breakable_surf" then
-				target:Fire("SetHealth", 0)
-				ply:ViewPunch(Angle(math.random(-5, 5), math.random(-5, 5), 0))
-
-			elseif target:IsPlayer() and (target:Alive() or target:GetMoveType() == MOVETYPE_WALK or not target:IsDisguised()) then
-				local velAng = ply:EyeAngles():Forward()
-				target:EmitSound(PHPushSounds[math.random(#PHPushSounds)], 100, 100)
-				target:SetVelocity(velAng * 500)
-				target:ViewPunch(Angle(math.random( -30, 30 ), math.random( -30, 30 ), 0))
-			end
-		end
-		ply.PHLastPush = CurTime()
-	end
-end
-
-function GM:PlayerUse(ply, ent)
-	ply.PHLastUse = ply.PHLastUse or 0
-
-	if IsValid(ent) and PHAntiExploit[ent:GetClass()] and ply.PHLastUse + 0.5 > CurTime() then
-		return false
-	end
-
-	ply.PHLastUse = CurTime()
-	return true
-end
-
-function GM:PlayerShouldTakeDamage(ply, attacker)
-	if IsValid(attacker) and PHDamageBlacklist[attacker:GetClass()] then
-		return false
-	end
-
-	return true
-end
-
-function GM:PlayerSwitchFlashlight(ply)
-	if ply:IsDisguised() then
-		return false
-	end
-
-	return true
-end
-
-function GM:PlayerCanSeePlayersChat(text, teamOnly, listener, speaker)
-	if !IsValid(speaker) then return false end
-	local canhear = self:PlayerCanHearChatVoice(listener, speaker, "chat", teamOnly)
-	return canhear
-end
-
-function GM:StartCommand(ply, cmd)
-	if ply:IsBot() then
-		cmd:SetForwardMove(0)
-		cmd:SetSideMove(0)
-		cmd:SetViewAngles(Angle(0, 0, 0))
-	end
-end
-
-function GM:PlayerShouldTaunt(ply, actid)
-	if not PHActWhitelist[actid] and not PHActEnableAll then
-		return false
-	end
-
-	return true
-end
-
-local sv_alltalk = GetConVar("sv_alltalk")
-function GM:PlayerCanHearPlayersVoice(listener, talker)
-	if !IsValid(talker) then return false end
-	return self:PlayerCanHearChatVoice(listener, talker, "voice")
-end
-
-function GM:PlayerCanHearChatVoice(listener, talker, typ, teamOnly)
-	if typ == "chat" && teamOnly then
-		if listener:Team() != talker:Team() then
-			return false
-		end
-	end
-
-	if sv_alltalk:GetInt() >= 2 then -- sv_alltalk is not a bool. 0 = team only with poximity, 1 = team only without proximity, 2 = everybody with proxitiy, 3 = everybody without proximity
-		return true
-	end
-
-	if self:GetGameState() == ROUND_POST || self:GetGameState() == ROUND_WAIT then
-		return true
-	end
-
-	-- spectators and dead players can hear everyone
-	if listener:IsSpectator() || !listener:Alive() then
-		return true
-	end
-
-	-- if the player is dead or a spectator we can't hear them
-	if !talker:Alive() || talker:IsSpectator() then
-		return false
-	end
-
-	return true
-end
-
-function GM:PlayerCanPickupWeapon(ply, wep)
-	if IsValid(wep) then
-		if ply:IsProp() then
-			return false
-		end
-	end
-
-	return true
-end
