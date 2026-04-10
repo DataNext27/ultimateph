@@ -424,5 +424,13 @@
 			"type"		"Numeric"
 			"default"	"160"
 		}
+		26
+		{
+			"name"		"ph_props_become_hunters"
+			"text"		"Props Become Hunters On Death"
+			"help"		"Props will revive as a hunter on death, recommended with only a single hunter"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
 	}
 }
