@@ -89,7 +89,7 @@ function PlayerList(parent, pteam, dock)
 		end
 
 		if LocalPlayer():IsAdmin() then
-			for cmd, cmdname in pairs(ULXCommands) do
+			for cmd, cmdname in pairs(PHULXCommands) do
 				PlayerActions:AddOption(cmdname, function()
 					LocalPlayer():ConCommand(cmd.." "..ply:Nick())
 				end)
@@ -183,7 +183,7 @@ function TeamHeader(parent, pteam, dock, text)
 
 	function TeamHeader:Paint(w, h)
 		surface.SetDrawColor(PHScobDarker)
-		draw.RoundedBoxEx(ScreenScaleH(CornerRadius), 0, 0, w, h, PHScobDarker, true, true, false, false)
+		draw.RoundedBoxEx(ScreenScaleH(PHCornerRadius), 0, 0, w, h, PHScobDarker, true, true, false, false)
 		draw.SimpleText(team.GetName(pteam), "RobotoHUD-18", ScreenScaleH(2), h / 2, team.GetColor(pteam), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 	
@@ -197,7 +197,7 @@ function SpectatorList(parent, pteam, dock)
 
 	function SpectatorListBG:Paint(w, h)
 		surface.SetFont("RobotoHUD-18")
-		draw.RoundedBox(ScreenScaleH(CornerRadius), 0, 0, w, h, PHScobDark)
+		draw.RoundedBox(ScreenScaleH(PHCornerRadius), 0, 0, w, h, PHScobDark)
 	end
 
 	JoinTeam(SpectatorListBG, TEAM_SPEC, LEFT, "Spectate")

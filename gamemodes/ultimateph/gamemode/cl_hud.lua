@@ -26,7 +26,7 @@ function GM:DrawGameHUD()
 	local eyeTrace = ply:GetEyeTraceNoCursor()
 	if GAMEMODE:HUDShouldDraw("PropHuntersPlayerNames") then
 		-- draw names
-		if IsValid(eyeTrace.Entity) and eyeTrace.Entity:IsPlayer() and eyeTrace.HitPos:Distance(eyeTrace.StartPos) < NameDistance then
+		if IsValid(eyeTrace.Entity) and eyeTrace.Entity:IsPlayer() and eyeTrace.HitPos:Distance(eyeTrace.StartPos) < PHNameDistance then
 			-- hunters can only see their teams names
 			if not ply:IsHunter() or ply:Team() == eyeTrace.Entity:Team() then
 				self.LastLooked = eyeTrace.Entity
