@@ -125,6 +125,11 @@ commandToUlx("ph_props_tpose", function(c)
     c:help("Should a prop be fully animated or in T pose")
 end)
 
+commandToUlx("ph_props_become_hunters", function(c)
+    c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
+    c:help("Should a prop respawn as a hunter on death, recommended with single hunter")
+end)
+
 commandToUlx("ph_props_undisguised_thirdperson", function(c)
     c:addParam{ type = ULib.cmds.BoolArg, hint = "enabled", ULib.cmds.optional }
     c:help("Should props be in thirdperson when undisguised")
