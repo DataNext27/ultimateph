@@ -160,6 +160,7 @@ end
 function GM:LoadTaunts()
 	loadTaunts((GM || GAMEMODE).Folder:sub(11) .. "/gamemode/taunts/")
 	loadTaunts("ultimateph/taunts/")
+	loadTaunts("prophunters/taunts/")
 end
 
 GM:LoadTaunts()

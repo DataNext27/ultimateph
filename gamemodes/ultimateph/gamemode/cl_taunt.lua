@@ -81,7 +81,7 @@ local function addCat(clist, name, taunts, mlist)
 			colMul(colt, 1.2)
 		end
 
-		draw.RoundedBoxEx(ScreenScaleH(CornerRadius), 0, 0, w, h, col, true, false, true, false)
+		draw.RoundedBoxEx(ScreenScaleH(PHCornerRadius), 0, 0, w, h, col, true, false, true, false)
 		draw.SimpleText(dname, "RobotoHUD-15", w / 2, h / 2, colt, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
@@ -204,7 +204,7 @@ local function openTauntMenu()
 			colMul(colt, 1.2)
 		end
 
-		draw.RoundedBoxEx(ScreenScaleH(CornerRadius), 0, 0, w, h, col, true, true, true, true)
+		draw.RoundedBoxEx(ScreenScaleH(PHCornerRadius), 0, 0, w, h, col, true, true, true, true)
 		draw.SimpleText("Random", "RobotoHUD-15", w / 2, h / 2, colt, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 

@@ -4,7 +4,7 @@ function GM:HUDPaint()
 end
 
 function GM:HUDShouldDraw(name)
-	if HudBlacklist[name] then 
+	if PHHudBlacklist[name] then 
 		return 
 	end
 
