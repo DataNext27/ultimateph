@@ -122,6 +122,7 @@ GM.PropTpose = CreateConVar("ph_props_tpose", 0, bit.bor(FCVAR_ARCHIVE, FCVAR_NO
 GM.PropUndisguisedThirdperson = CreateConVar("ph_props_undisguised_thirdperson", 0, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Should props start in thirdperson")
 
 GM.AutoTeamBalance = CreateConVar("ph_auto_team_balance", 1, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Automatically balance teams")
+GM.PropBecomeHunter = CreateConVar("ph_props_become_hunters", 0, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Props become a hunter on death")
 GM.NumberHunter = CreateConVar("ph_nb_hunter", 2, bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Set the maximum number of hunters, only works if auto team balance is disable")
 
 GM.TauntMenuPhrase = CreateConVar("ph_taunt_menu_phrase", "make annoying fart sounds", bit.bor(FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE), "Phrase shown at the top of the taunt menu")

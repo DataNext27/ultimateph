@@ -322,6 +322,11 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	end
 
 	self:AddKillFeed(ply, attacker, dmginfo)
+
+	if GAMEMODE.PropBecomeHunter:GetBool() and ply:IsProp() and self:GetGameState() == ROUND_SEEK then
+		ply:SetTeam(TEAM_HUNTER)
+		timer.Simple(1, function() ply:Spawn() end)
+	end
 end
 
 function GM:PlayerDeath(ply, inflictor, attacker)
