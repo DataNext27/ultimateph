@@ -69,6 +69,7 @@ end
 
 -- display name, table of sound files, team (name or id), sex (nil for both), table of category ids, [duration in seconds]
 local function addTaunt(name, snd, pteam, sex, cats, duration, allowedModels)
+	print(snd)
 	if !name || type(name) != "string" then return end
 	if type(snd) != "table" then snd = {tostring(snd)} end
 	if #snd == 0 then error("No sounds for " .. name) return end
@@ -183,9 +184,9 @@ if SERVER then
 	
 	function PlayerMeta:EmitTaunt(filename, durationOverride)
 		local duration = SoundDuration(filename)
-		if filename:match("%.mp3$") then
-			duration = durationOverride || 1
-		end
+--		if filename:match("%.mp3$") then
+--			duration = durationOverride || 1
+--		end
 	
 		local sndName = FilenameToSoundname(filename)
 	
